@@ -1,0 +1,49 @@
+digraph scholarship_cfg {
+  graph [rankdir=TB, bgcolor="white", pad=0.25, nodesep=0.35, ranksep=0.45]
+  node [shape=box, style="rounded,filled", fillcolor="#eef4ff", color="#315a9b", fontname="Arial", fontsize=10]
+  edge [fontname="Arial", fontsize=7, color="#444444"]
+
+  start [shape=circle, label="start", fillcolor="#d9ead3", width=0.45]
+  v1 [shape=diamond, label="gpa < 0?"]
+  v2 [shape=diamond, label="gpa > 4?"]
+  v3 [shape=diamond, label="credits < 0?"]
+  invalid [label="throw IllegalArgumentException"]
+  violation [shape=diamond, label="hasViolation?"]
+  zeroV [label="return 0"]
+  highGpa [shape=diamond, label="gpa >= 3.8?"]
+  highCredits [shape=diamond, label="credits >= 15?"]
+  full [label="return 100"]
+  midGpa [shape=diamond, label="gpa >= 3.4?"]
+  midCredits [shape=diamond, label="credits >= 12?"]
+  partial [label="return 70"]
+  baseGpa [shape=diamond, label="gpa >= 3.0?"]
+  half [label="return 50"]
+  zero [label="return 0"]
+  end [shape=doublecircle, label="end", width=0.45]
+
+  start -> v1
+  v1 -> invalid [label="T: scholarshipRejectsNegativeGpa"]
+  v1 -> v2 [label="F: scholarshipRejectsGpaAboveMaximum"]
+  v2 -> invalid [label="T: scholarshipRejectsGpaAboveMaximum"]
+  v2 -> v3 [label="F: scholarshipRejectsNegativeCredits"]
+  v3 -> invalid [label="T: scholarshipRejectsNegativeCredits"]
+  v3 -> violation [label="F: scholarshipReturnsZeroForViolation"]
+  invalid -> end
+  violation -> zeroV [label="T: scholarshipReturnsZeroForViolation"]
+  violation -> highGpa [label="F: scholarshipReturnsFullAwardForHighGpaAndCredits"]
+  zeroV -> end
+  highGpa -> highCredits [label="T: scholarshipReturnsFullAwardForHighGpaAndCredits"]
+  highGpa -> midGpa [label="F: scholarshipFallsThroughWhenPartialAwardCreditsAreInsufficient"]
+  highCredits -> full [label="T: scholarshipReturnsFullAwardForHighGpaAndCredits"]
+  highCredits -> midGpa [label="F: scholarshipFallsThroughWhenFullAwardCreditsAreInsufficient"]
+  full -> end
+  midGpa -> midCredits [label="T: scholarshipFallsThroughWhenPartialAwardCreditsAreInsufficient"]
+  midGpa -> baseGpa [label="F: scholarshipReturnsZeroBelowMinimumGpa"]
+  midCredits -> partial [label="T: scholarshipReturnsPartialAwardForQualifyingGpa"]
+  midCredits -> baseGpa [label="F: scholarshipFallsThroughWhenPartialAwardCreditsAreInsufficient"]
+  partial -> end
+  baseGpa -> half [label="T: scholarshipReturnsPartialAwardForQualifyingGpa"]
+  baseGpa -> zero [label="F: scholarshipReturnsZeroBelowMinimumGpa"]
+  half -> end
+  zero -> end
+}
