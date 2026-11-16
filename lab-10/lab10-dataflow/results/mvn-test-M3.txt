@@ -1,25 +1,13 @@
-mvn.cmd : WARNING: A restricted method in java.lang.System has been called
-At line:2 char:970
-+ ... ($false))); & $m -f (Join-Path $proj 'pom.xml') test *> (Join-Path $r ...
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (WARNING: A rest...has been called:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
-WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module 
-(file:/C:/Users/tsegm/AppData/Local/Temp/apache-maven-3.9.9/lib/jansi-2.4.1.jar)
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/C:/Users/tsegm/AppData/Local/Temp/apache-maven-3.9.9/lib/jansi-2.4.1.jar)
 WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
 WARNING: Restricted methods will be blocked in a future release unless native access is enabled
 
 WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
-WARNING: sun.misc.Unsafe::objectFieldOffset has been called by 
-com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper 
-(file:/C:/Users/tsegm/AppData/Local/Temp/apache-maven-3.9.9/lib/guava-33.2.1-jre.jar)
-WARNING: Please consider reporting this to the maintainers of class 
-com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/C:/Users/tsegm/AppData/Local/Temp/apache-maven-3.9.9/lib/guava-33.2.1-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
 WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
-WARNING: Final field _cipher in class org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher has been 
-mutated reflectively by class org.eclipse.sisu.bean.BeanPropertyField in unnamed module @5af97850 
-(file:/C:/Users/tsegm/AppData/Local/Temp/apache-maven-3.9.9/lib/org.eclipse.sisu.inject-0.9.0.M3.jar)
+WARNING: Final field _cipher in class org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher has been mutated reflectively by class org.eclipse.sisu.bean.BeanPropertyField in unnamed module @5af97850 (file:/C:/Users/tsegm/AppData/Local/Temp/apache-maven-3.9.9/lib/org.eclipse.sisu.inject-0.9.0.M3.jar)
 WARNING: Use --enable-final-field-mutation=ALL-UNNAMED to avoid a warning
 WARNING: Mutating final fields will be blocked in a future release unless final field mutation is enabled
 [INFO] Scanning for projects...
@@ -30,17 +18,17 @@ WARNING: Mutating final fields will be blocked in a future release unless final 
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
 [INFO] --- jacoco:0.8.12:prepare-agent (default) @ lab10-dataflow ---
-[INFO] argLine set to -javaagent:C:\\Users\\tsegm\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.12\\org.jacoco.agent-0.8.12-runtime.jar=destfile=C:\\4A\\F.CSA313\\lab-10\\lab10-dataflow\\target\\jacoco.exec
+[INFO] argLine set to -javaagent:C:\\Users\\tsegm\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.12\\org.jacoco.agent-0.8.12-runtime.jar=destfile=C:\\Users\\tsegm\\AppData\\Local\\Temp\\lab10-history-rewrite2\\lab-10\\lab10-dataflow\\target\\jacoco.exec
 [INFO] 
 [INFO] --- resources:3.3.1:resources (default-resources) @ lab10-dataflow ---
-[INFO] skip non existing resourceDirectory C:\4A\F.CSA313\lab-10\lab10-dataflow\src\main\resources
+[INFO] skip non existing resourceDirectory C:\Users\tsegm\AppData\Local\Temp\lab10-history-rewrite2\lab-10\lab10-dataflow\src\main\resources
 [INFO] 
 [INFO] --- compiler:3.13.0:compile (default-compile) @ lab10-dataflow ---
 [INFO] Recompiling the module because of changed source code.
 [INFO] Compiling 1 source file with javac [debug release 17] to target\classes
 [INFO] 
 [INFO] --- resources:3.3.1:testResources (default-testResources) @ lab10-dataflow ---
-[INFO] skip non existing resourceDirectory C:\4A\F.CSA313\lab-10\lab10-dataflow\src\test\resources
+[INFO] skip non existing resourceDirectory C:\Users\tsegm\AppData\Local\Temp\lab10-history-rewrite2\lab-10\lab10-dataflow\src\test\resources
 [INFO] 
 [INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ lab10-dataflow ---
 [INFO] Recompiling the module because of changed dependency.
@@ -52,8 +40,7 @@ WARNING: Mutating final fields will be blocked in a future release unless final 
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-java.lang.instrument.IllegalClassFormatException: Error while instrumenting 
-sun/util/resources/cldr/provider/CLDRLocaleDataMetaInfo with JaCoCo 0.8.12.202403310830/dbfb6f2.
+java.lang.instrument.IllegalClassFormatException: Error while instrumenting sun/util/resources/cldr/provider/CLDRLocaleDataMetaInfo with JaCoCo 0.8.12.202403310830/dbfb6f2.
 	at org.jacoco.agent.rt.internal_aeaf9ab.CoverageTransformer.transform(CoverageTransformer.java:94)
 	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(ClassFileTransformer.java:257)
 	at java.instrument/sun.instrument.TransformerManager.transform(TransformerManager.java:188)
@@ -89,8 +76,7 @@ sun/util/resources/cldr/provider/CLDRLocaleDataMetaInfo with JaCoCo 0.8.12.20240
 	at org.apache.maven.surefire.booter.ForkedBooter.setupBooter(ForkedBooter.java:139)
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:506)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
-Caused by: java.io.IOException: Error while instrumenting sun/util/resources/cldr/provider/CLDRLocaleDataMetaInfo with 
-JaCoCo 0.8.12.202403310830/dbfb6f2.
+Caused by: java.io.IOException: Error while instrumenting sun/util/resources/cldr/provider/CLDRLocaleDataMetaInfo with JaCoCo 0.8.12.202403310830/dbfb6f2.
 	at org.jacoco.agent.rt.internal_aeaf9ab.core.instr.Instrumenter.instrumentError(Instrumenter.java:161)
 	at org.jacoco.agent.rt.internal_aeaf9ab.core.instr.Instrumenter.instrument(Instrumenter.java:111)
 	at org.jacoco.agent.rt.internal_aeaf9ab.CoverageTransformer.transform(CoverageTransformer.java:92)
@@ -104,9 +90,9 @@ Caused by: java.lang.IllegalArgumentException: Unsupported class file major vers
 	at org.jacoco.agent.rt.internal_aeaf9ab.core.instr.Instrumenter.instrument(Instrumenter.java:109)
 	... 35 more
 [INFO] Running mn.edu.must.sqat.BonusTest
-[INFO] Tests run: 26, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.071 s -- in mn.edu.must.sqat.BonusTest
+[INFO] Tests run: 26, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.080 s -- in mn.edu.must.sqat.BonusTest
 [INFO] Running mn.edu.must.sqat.GcdTest
-[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s -- in mn.edu.must.sqat.GcdTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in mn.edu.must.sqat.GcdTest
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -115,6 +101,6 @@ Caused by: java.lang.IllegalArgumentException: Unsupported class file major vers
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  2.064 s
-[INFO] Finished at: 2026-11-16T10:03:53+08:00
+[INFO] Total time:  2.418 s
+[INFO] Finished at: 2026-11-16T10:31:52+08:00
 [INFO] ------------------------------------------------------------------------

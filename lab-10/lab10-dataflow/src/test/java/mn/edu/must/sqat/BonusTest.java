@@ -268,4 +268,12 @@ public class BonusTest {
         //         best def@37->use@42 TRUE (0 from def@37 used in comparison, TRUE)
         assertEquals(5, DataFlowTargets.bonus(new int[]{0, 1}, 1));
     }
+
+    @Test
+    @DisplayName("M2-kill: best update must use streak, not present")
+    void M2Kill_bestUpdateUsesStreak() {
+        // Correct: present=6, longest streak=4 => score 5.
+        // M2 (best=present) incorrectly makes best=6 and returns 8.
+        assertEquals(5, DataFlowTargets.bonus(new int[]{1, 1, 0, 1, 1, 1, 1}, 0));
+    }
 }

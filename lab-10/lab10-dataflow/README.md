@@ -12,9 +12,11 @@ java version "27" 2026-09-15
 Java(TM) SE Runtime Environment (build 27+35-2325)
 Java HotSpot(TM) 64-Bit Server VM (build 27+35-2325, mixed mode, sharing)
 
-Apache Maven 3.9.9
-Java version: 27, vendor: Oracle Corporation
-OS name: "Windows 11", arch: "amd64"
+Apache Maven 3.9.9 (8e8579a9e76f7d0155a411bc0898af1a51f5472)
+Maven home: C:\Users\tsegm\AppData\Local\Temp\apache-maven-3.9.9
+Java version: 27, vendor: Oracle Corporation, runtime: C:\Program Files\Java\jdk-27
+Default locale: en_US, platform encoding: UTF-8
+OS name: "Windows 11", version: "10.0", arch: "amd64", family: "windows"
 ```
 
 ## Тестийн үе шат
@@ -28,10 +30,11 @@ OS name: "Windows 11", arch: "amd64"
 |---|---:|---|
 | GCD all-DU-pairs | 6 | 0 failure, 0 error |
 | Bonus all-defs | 3 | 0 failure, 0 error |
-| Bonus all-DU-pairs | 23 | 0 failure, 0 error |
-| Нийт | 32 | 0 failure, 0 error |
+| Bonus all-DU-pairs | 24 | 0 failure, 0 error |
+| Нийт final | 33 | 0 failure, 0 error |
 
-Бодит Maven гаралтыг [results/](C:/4A/F.CSA313/lab-10/lab10-dataflow/results/) дотор хадгалсан.
+All-defs үеийн verify-д GCD-ийн 6, Bonus-ийн 3 буюу нийт 9 тест ажилласан.
+Бодит Maven гаралтыг `results/` дотор хадгалсан.
 
 ## GCD DU-ийн бүрэн хүснэгт
 
@@ -56,12 +59,46 @@ ID, зам нь definition-ээс use хүртэлх def-clear execution path ю
 | y | 18 | 18 | c-use | G3 | updated `y` → next assignment |
 | tmp | 16 | 18 | c-use | G2, G3 | `tmp=x%y` → `y=tmp` |
 
-Дэлгэрэнгүй test-to-pair mapping нь [GcdTest.java](C:/4A/F.CSA313/lab-10/lab10-dataflow/src/test/java/mn/edu/must/sqat/GcdTest.java)-д байна.
+Эдгээр нь x, y, tmp-ийн бүх reachable def-clear хосууд; `GcdTest.java`
+доторх G1–G6 тестийн нэр/тайлбар нь хүснэгтийн T баганатай таарна.
+
+## Bonus def/use жагсаалт ба DU хүснэгт
+
+| Variable | Definition | Use (kind) | Kill |
+|---|---|---|---|
+| attendance | 31 parameter | 32 p-use, 38 p-use | validation terminates invalid path |
+| threshold | 31 parameter | 32 p-use, 50 p-use | validation terminates invalid path |
+| present | 35 init, 40 increment | 40 c-use, 50 p-use, 54 c-use | line 40 |
+| streak | 36 init, 41 increment, 46 reset | 41 c-use, 42 p-use | lines 41 and 46 |
+| best | 37 init, 43 update | 42 p-use, 53 p-use | line 43 |
+| a | 38 for-each definition | 39 p-use | next iteration definition |
+| score | 49 init, 51 base, 54 streak bonus | 51 c-use, 54 c-use, 56 c-use | lines 51 and 54 |
+
+| Def | Use | Kind | Kill before use | Test IDs | Feasibility |
+|---|---|---|---|---|---|
+| attendance@31 | 32 | p-use T/F | validation | T4,T5 | reachable |
+| attendance@31 | 38 | p-use T/F | none | T6,T7 | reachable |
+| threshold@31 | 32 | p-use T/F | validation | T5 | reachable |
+| threshold@31 | 50 | p-use T/F | none | T13,T14 | reachable |
+| present@35 | 40,50 | c/p-use | 40 | T1,T2,T3 | reachable |
+| present@40 | 40,50 | c/p-use | 40 | T10,T11,T12 | reachable |
+| streak@36 | 41,42 | c/p-use | 41/46 | T1,T2 | reachable |
+| streak@41 | 41,42 | c/p-use | 41/46 | T22,T23,T24 | reachable |
+| streak@46 | 41,42 | c/p-use | 41/46 | T8,T9,T26 | reachable |
+| best@37 | 42,53 | p-use | 43 | T1,T15 | reachable |
+| best@43 | 42,53 | p-use | 43 | T16,T17 | reachable |
+| a@38 | 39 | p-use T/F | next iteration | T18,T19 | reachable |
+| score@49 | 51,54,56 | c-use | 51/54 | T3,T21,T25 | reachable |
+| score@51 | 54,56 | c-use | 54 | T20,T25 | reachable |
+| score@54 | 56 | c-use | return | T2,T20 | reachable |
+
+Validation throw paths cannot reach loop/body uses after line 32; those
+cross-path combinations are infeasible because execution terminates.
 
 ## Bonus CFG ба DU
 
-[cfg-bonus.png](C:/4A/F.CSA313/lab-10/lab10-dataflow/docs/cfg-bonus.png) нь
-мөрийн дугаартай зангилаа, тестийн нэртэй ирмэгүүдийг харуулна.
+[cfg-bonus.png](docs/cfg-bonus.png) нь мөрийн дугаартай зангилаа, бодит
+тестийн method name-тэй ирмэгүүдийг харуулна.
 Нөхцөлт use бүрийн true/false зам, kill тэмдэглэгээ, бүх DU хос болон
 биелэшгүй хосын үндэслэлийг [bonus-du-table.md](C:/4A/F.CSA313/lab-10/lab10-dataflow/docs/bonus-du-table.md)-д
 өгсөн.
@@ -77,17 +114,30 @@ LINE_MISSED = 1
 
 `LINE_MISSED=1` нь далд default constructor бөгөөд зөвшөөрөгдөнө.
 
+`jacoco-alldefs.csv`: `BRANCH_MISSED=3`, `BRANCH_COVERED=13`,
+`LINE_MISSED=2`, `LINE_COVERED=22`. `jacoco-final.csv`:
+`BRANCH_MISSED=0`, `BRANCH_COVERED=16`, `LINE_MISSED=1`,
+`LINE_COVERED=23`.
+
+All-defs үед branch coverage бүрэн биш байж болно: all-defs нь definition
+бүрээс дор хаяж нэг use рүү хүрэхийг шалгадаг, харин predicate-ийн бүх
+true/false салааг заавал шаардахгүй. Эсрэгээр branch 100% болсон ч DU хос
+дутуу байж болно; жишээ нь нэг if-ийн хоёр салааг ажиллуулсан ч loop-carried
+`streak@41 -> streak@41` зэрэг хосыг олон давталтгүйгээр хамруулахгүй.
+
 ## Fault seeding
 
 | Mutant | Өөрчлөлт | Үр дүн | Унагах тест |
 |---|---|---|---|
-| M1 | `a > 0`-ийг `a >= 0` болгосон | Killed | `DU_a_def38_use39_FALSE`, `allDefs_T1_allZero` |
-| M2 | `best >= 5`-ийг `best > 5` болгосон | Killed | `allDefs_T2_longStreak`, `DU_score_def51_use54`, `DU_best_def43_use53_TRUE` |
-| M3 | `int tmp;`-ийг `int tmp = 0;` болгосон | Survived | Анхны `tmp=0` definition нь line 16-д overwrite хийгддэг dead definition |
+| M1 | line 41-ийн `streak = streak + 1` устгасан | Killed, 4 failures | `DU_best_def43_use42`, `DU_best_def43_use53_TRUE`, `DU_score_def51_use54`, `allDefs_T2_longStreak` |
+| M2 | `best = streak`-ийг `best = present` болгосон | Survived эхний suite | `mvn-test-M2.txt`; нэмэлт kill: `M2Kill_bestUpdateUsesStreak` |
+| M3 | `int total = present + best` unused definition нэмсэн | Survived | Dead definition; `mvn-test-M3.txt` |
 
-M2 нь `best=5` үед `+3` оноо өгөх ёстой гэсэн гурван assertion-аар баригдана.
-M3-ийн нэмэгдсэн `tmp=0` definition нь line 16-ийн `tmp=x%y`-ээр
-ашиглагдахаас өмнө overwrite хийгддэг тул dead definition бөгөөд observable
-үр дүнд нөлөөлөхгүй.
+M2 нь анхны all-DU-pairs тестүүдэд амьд үлдсэн: `best` шинэчлэгдэх мөчид
+зарим оролт дээр `present` ба `streak` ижил утгатай байдаг. Нэмэлт
+`M2Kill_bestUpdateUsesStreak` тест нь `[1,1,0,1,1,1,1]` оролтоор зөв
+хариу 5, M2-mutant-ийн хариу 8 болохыг шалгана. M3-ийн `total` definition
+ямар ч use-д хүрдэггүй тул runtime тест унагахгүй; static analysis/IDE
+unused-local warning үүнийг илрүүлэх ёстой.
 
 Эцсийн `src/main` нь starter source-той ижил.
