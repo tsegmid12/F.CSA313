@@ -1,0 +1,164 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: slo-test-fail.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 20 max VUs, 1m0s max duration (incl. graceful stop):
+              * default: 20 looping VUs for 30s (gracefulStop: 30s)
+
+
+running (0m01.0s), 20/20 VUs, 0 complete and 0 interrupted iterations
+default   [   3% ] 20 VUs  01.0s/30s
+
+running (0m02.0s), 20/20 VUs, 20 complete and 0 interrupted iterations
+default   [   7% ] 20 VUs  02.0s/30s
+
+running (0m03.0s), 20/20 VUs, 40 complete and 0 interrupted iterations
+default   [  10% ] 20 VUs  03.0s/30s
+
+running (0m04.0s), 20/20 VUs, 57 complete and 0 interrupted iterations
+default   [  13% ] 20 VUs  04.0s/30s
+
+running (0m05.0s), 20/20 VUs, 61 complete and 0 interrupted iterations
+default   [  17% ] 20 VUs  05.0s/30s
+
+running (0m06.0s), 20/20 VUs, 80 complete and 0 interrupted iterations
+default   [  20% ] 20 VUs  06.0s/30s
+
+running (0m07.0s), 20/20 VUs, 100 complete and 0 interrupted iterations
+default   [  23% ] 20 VUs  07.0s/30s
+
+running (0m08.0s), 20/20 VUs, 118 complete and 0 interrupted iterations
+default   [  27% ] 20 VUs  08.0s/30s
+
+running (0m09.0s), 20/20 VUs, 130 complete and 0 interrupted iterations
+default   [  30% ] 20 VUs  09.0s/30s
+
+running (0m10.0s), 20/20 VUs, 141 complete and 0 interrupted iterations
+default   [  33% ] 20 VUs  10.0s/30s
+
+running (0m11.0s), 20/20 VUs, 160 complete and 0 interrupted iterations
+default   [  37% ] 20 VUs  11.0s/30s
+
+running (0m12.0s), 20/20 VUs, 179 complete and 0 interrupted iterations
+default   [  40% ] 20 VUs  12.0s/30s
+
+running (0m13.0s), 20/20 VUs, 193 complete and 0 interrupted iterations
+default   [  43% ] 20 VUs  13.0s/30s
+
+running (0m14.0s), 20/20 VUs, 202 complete and 0 interrupted iterations
+default   [  47% ] 20 VUs  14.0s/30s
+
+running (0m15.0s), 20/20 VUs, 220 complete and 0 interrupted iterations
+default   [  50% ] 20 VUs  15.0s/30s
+
+running (0m16.0s), 20/20 VUs, 240 complete and 0 interrupted iterations
+default   [  53% ] 20 VUs  16.0s/30s
+
+running (0m17.0s), 20/20 VUs, 253 complete and 0 interrupted iterations
+default   [  57% ] 20 VUs  17.0s/30s
+
+running (0m18.0s), 20/20 VUs, 266 complete and 0 interrupted iterations
+default   [  60% ] 20 VUs  18.0s/30s
+
+running (0m19.0s), 20/20 VUs, 281 complete and 0 interrupted iterations
+default   [  63% ] 20 VUs  19.0s/30s
+
+running (0m20.0s), 20/20 VUs, 300 complete and 0 interrupted iterations
+default   [  67% ] 20 VUs  20.0s/30s
+
+running (0m21.0s), 20/20 VUs, 315 complete and 0 interrupted iterations
+default   [  70% ] 20 VUs  21.0s/30s
+
+running (0m22.0s), 20/20 VUs, 328 complete and 0 interrupted iterations
+default   [  73% ] 20 VUs  22.0s/30s
+
+running (0m23.0s), 20/20 VUs, 342 complete and 0 interrupted iterations
+default   [  77% ] 20 VUs  23.0s/30s
+
+running (0m24.0s), 20/20 VUs, 360 complete and 0 interrupted iterations
+default   [  80% ] 20 VUs  24.0s/30s
+
+running (0m25.0s), 20/20 VUs, 380 complete and 0 interrupted iterations
+default   [  83% ] 20 VUs  25.0s/30s
+
+running (0m26.0s), 20/20 VUs, 389 complete and 0 interrupted iterations
+default   [  87% ] 20 VUs  26.0s/30s
+
+running (0m27.0s), 20/20 VUs, 404 complete and 0 interrupted iterations
+default   [  90% ] 20 VUs  27.0s/30s
+
+running (0m28.0s), 20/20 VUs, 420 complete and 0 interrupted iterations
+default   [  93% ] 20 VUs  28.0s/30s
+
+running (0m29.0s), 20/20 VUs, 439 complete and 0 interrupted iterations
+default   [  97% ] 20 VUs  29.0s/30s
+
+running (0m30.0s), 20/20 VUs, 456 complete and 0 interrupted iterations
+default   [ 100% ] 20 VUs  30.0s/30s
+
+running (0m31.0s), 11/20 VUs, 465 complete and 0 interrupted iterations
+default ↓ [ 100% ] 20 VUs  30s
+
+
+  █ THRESHOLDS 
+
+    checks
+    ✓ 'rate>0.90' rate=98.45%
+
+    http_req_duration{name:cart}
+    ✓ 'p(95)<50' p(95)=1.73ms
+
+    http_req_duration{name:report}
+    ✗ 'p(95)<100' p(95)=387.67ms
+
+    http_req_failed{name:pay}
+    ✓ 'rate<0.08' rate=4.62%
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 1428   45.583426/s
+    checks_succeeded...: 98.45% 1406 out of 1428
+    checks_failed......: 1.54%  22 out of 1428
+
+    ✓ cart 200
+    ✓ report 200
+    ✗ pay 200
+      ↳  95% — ✓ 454 / ✗ 22
+
+    HTTP
+    http_req_duration..............: avg=98.99ms  min=168µs    med=886.5µs  max=400.46ms p(90)=338.88ms p(95)=369.28ms
+      { expected_response:true }...: avg=100.53ms min=168µs    med=898.5µs  max=400.46ms p(90)=340.16ms p(95)=369.97ms
+      { name:cart }................: avg=953.57µs min=180µs    med=827.49µs max=6.27ms   p(90)=1.27ms   p(95)=1.73ms  
+      { name:report }..............: avg=295.47ms min=199.63ms med=290.92ms max=400.46ms p(90)=379.54ms p(95)=387.67ms
+    http_req_failed................: 1.54%  22 out of 1428
+      { name:pay }.................: 4.62%  22 out of 476
+    http_reqs......................: 1428   45.583426/s
+
+    EXECUTION
+    iteration_duration.............: avg=1.29s    min=1.2s     med=1.29s    max=1.4s     p(90)=1.38s    p(95)=1.39s   
+    iterations.....................: 476    15.194475/s
+    vus............................: 11     min=11         max=20
+    vus_max........................: 20     min=20         max=20
+
+    NETWORK
+    data_received..................: 358 kB 11 kB/s
+    data_sent......................: 127 kB 4.1 kB/s
+
+
+
+
+running (0m31.3s), 00/20 VUs, 476 complete and 0 interrupted iterations
+default ✓ [ 100% ] 20 VUs  30s
+time="2026-09-27T13:12:45+08:00" level=error msg="thresholds on metrics 'http_req_duration{name:report}' have been crossed"
+
+==== exit code ====
+k6 exit=99 (тэг биш = threshold FAIL, CI build-ыг зогсоох дохио)
