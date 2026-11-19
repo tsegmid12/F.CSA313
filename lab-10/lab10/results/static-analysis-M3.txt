@@ -1,0 +1,17 @@
+Mutant M3: "int total = present + best;" inserted after the loop (line 49 of the mutated file); total is never read.
+
+$ javac -Xlint:all -d target/lint src/main/java/mn/edu/must/sqat/DataFlowTargets.java
+(no output, exit code 0: javac does not warn about an unused local variable)
+
+$ mvn org.apache.maven.plugins:maven-pmd-plugin:3.26.0:pmd -Dformat=xml      (PMD 7.7.0, default maven-pmd-plugin ruleset)
+BUILD SUCCESS. target/pmd.xml contains 1 violation:
+
+  File:    src/main/java/mn/edu/must/sqat/DataFlowTargets.java
+  Method:  bonus
+  Line:    49
+  Rule:    UnusedLocalVariable (Best Practices)
+  Message: Avoid unused local variables such as 'total'.
+
+Note: the PMD run also printed "[ERROR] Parsing failed in ParseLock#doParse() ... Unsupported class file major version 71"
+many times. That comes from PMD's bundled ASM reading JDK 27 library classes for its auxiliary classpath; it does not
+affect the source analysis above, which produced the violation. The source file was restored with git restore afterwards.
