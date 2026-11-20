@@ -30,7 +30,21 @@ Default locale: en_US, platform encoding: UTF-8
 OS name: "Windows 11", version: "10.0", arch: "amd64", family: "windows"
 ```
 
-Java 27-ийн class-file major version 71-тэй JaCoCo 0.8.12 нийцэхгүй байсан тул `pom.xml` дахь JaCoCo plugin-ийг **0.8.16** болгосон. Нотолгооны шинэ run нь GitHub Actions дээр JDK 17 болон Maven ашиглан ажиллана; яг тухайн run-ийн бүтэн хувилбарын гаралт `results/java-version.txt`, `results/maven-version.txt` файлд хадгалагдана. Хуучин JaCoCo 0.8.12 log/CSV-г шинэ үр дүн гэж ашиглахгүй.
+Java 27-ийн class-file major version 71-тэй JaCoCo 0.8.12 нийцэхгүй байсан тул `pom.xml` дахь JaCoCo plugin-ийг **0.8.16** болгосон. Шинэ нотолгоог GitHub Actions дээр JDK 17.0.21, Maven 3.9.15 ашиглан бодитоор үүсгэсэн. CI-ийн бүтэн гаралт `results/java-version.txt`, `results/maven-version.txt` файлд хадгалагдсан. Хуучин JaCoCo 0.8.12 log/CSV-г шинэ үр дүн гэж ашиглахгүй.
+
+CI орчны бодит хувилбарын гаралт:
+
+```text
+openjdk version "17.0.21" 2026-10-20
+OpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)
+OpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)
+
+Apache Maven 3.9.15 (98b2cdbfdb5f1ac8781f537ea9acccaed7922349)
+Maven home: /usr/share/apache-maven-3.9.15
+Java version: 17.0.21, vendor: Eclipse Adoptium, runtime: /usr/lib/jvm/temurin-17-jdk-amd64
+Default locale: en, platform encoding: UTF-8
+OS name: "linux", version: "7.0.0-1019-azure", arch: "amd64", family: "unix"
+```
 
 ## A. GCD — all-DU-pairs
 
@@ -61,13 +75,30 @@ Bonus функцийн бүх хувьсагчийн definition, c-use, p-use, k
 
 Mutation log болон exit code-ууд `results/mvn-test-M1.txt`, `results/mvn-test-M2.txt`, `results/mvn-test-M2-kill.txt`, `results/mvn-test-M3.txt` болон `results/mutant-*-exit.txt` файлд байна. M3 нь dead definition тул runtime assertion түүнийг илрүүлэх боломжгүй; энэ нь static analysis-ийн зорилтот жишээ юм.
 
+## Тестийн бодит үр дүн
+
+2026-11-20-ны GitHub Actions run дээр JaCoCo 0.8.16 ашиглан дараах үр дүн гарсан:
+
+| Үе шат | Тест | Failure | Error | Build |
+|---|---:|---:|---:|---|
+| Bonus all-defs minimum | 2 | 0 | 0 | SUCCESS |
+| GCD + Bonus all-DU-pairs | 29 | 0 | 0 | SUCCESS |
+| Final complete suite | 32 | 0 | 0 | SUCCESS |
+
+| Coverage тайлан | Branch missed | Branch covered | Line missed | Line covered |
+|---|---:|---:|---:|---:|
+| All-defs | 5 | 11 | 7 | 17 |
+| All-DU-pairs | 0 | 16 | 1 | 23 |
+| Final | 0 | 16 | 1 | 23 |
+
+Final suite-ийн branch coverage **16/16 = 100%**. Line coverage нь **23/24**; үлдсэн нэг missed line нь ашиглагддаггүй default constructor. Шинэ Maven log-ууд JaCoCo 0.8.16 ашигласан бөгөөд `BUILD SUCCESS`-ээр төгссөн.
 ## JaCoCo болон дахин давтагдах шалгалт
 
 `pom.xml` дахь JaCoCo 0.8.16 нь coverage тайлан үүсгэнэ. GitHub Actions workflow `.github/workflows/lab10-dataflow.yml` нь:
 1. all-defs-ийн 2 тестийг тусад нь ажиллуулж `mvn-verify-alldefs.txt`, `jacoco-alldefs.csv` үүсгэнэ;
 2. GCD болон Bonus-ийн DU тестүүдийг тусад нь ажиллуулж `mvn-verify-allpairs.txt`, `jacoco-allpairs.csv` үүсгэнэ;
 3. бүх тестийг `mvn clean verify`-ээр ажиллуулж `mvn-verify-final.txt`, `jacoco-final.csv` үүсгэнэ;
-4. M1/M2/M3 mutation туршилтыг ажиллуулж тус бүрийн log, exit code хадгална;
+4. M1/M2/M3 mutation туршилтыг ажиллуулж тус бүрийн log, exit code хадгална; M3-ийн unused local definition-ийг PMD `UnusedLocalVariable` дүрмээр шалгана;
 5. шинээр үүсгэсэн нотолгоог repository-ийн `results/` хавтаст commit хийнэ.
 
 Final coverage тайланг JaCoCo CSV-ийн `BRANCH_MISSED`, `BRANCH_COVERED`, `LINE_MISSED`, `LINE_COVERED` баганаас уншина. Зорилтот үр дүн нь бүх branch хамрагдсан байх; далд default constructor-оос үүдэх ганц missed line зөвшөөрөгдөнө. Coverage тоог гараар таамаглан бичихгүй, зөвхөн шинээр ажилласан `results/jacoco-*.csv`-ээс авна.
