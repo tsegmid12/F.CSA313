@@ -122,19 +122,61 @@ http_req_failed
 
 ---
 
-## Алхам 5 — Локал серверийн нэмэлт тест
+## Алхам 5 — Локал серверийн нэмэлт тестүүд
 
-Локал сервер `/slow` endpoint-д 100ms controlled delay өгдөг.
+Энэ репозиторид өөр зориулалттай **хоёр локал сервер** байна. Эдгээрийг нэг endpoint эсвэл нэг порт гэж ойлгож болохгүй.
+
+| Сервер | Порт | Endpoint | Зориулалт | Ашигладаг тест |
+|---|---:|---|---|---|
+| `local-server.js` | 8080 | `/health`, `/slow` | Baseline болон SLO threshold | `script-baseline.js`, `script-thresholds.js`, `script-thresholds-fail.js` |
+| `local-server/server.js` | 3000 | `/fast`, `/slow`, `/cpu` | Saturation / CPU-bound нэмэлт туршилт | `script-local.js` |
+
+### 5.1 Baseline / threshold сервер — порт 8080
+
+Энэ серверийн `/slow` endpoint хүсэлт бүрт ойролцоогоор 100 ms асинхрон саатал өгнө. Baseline болон PASS/FAIL-ийн үр дүнг хооронд нь зөв харьцуулахын тулд эдгээр тест бүгд ижил endpoint ашигласан.
 
 ```bash
 node local-server.js
-k6 run script-thresholds.js | tee results/run-threshold-pass.txt
-k6 run script-thresholds-fail.js | tee results/run-threshold-fail.txt
+# Өөр PowerShell цонхонд:
+k6 run script-baseline.js
+k6 run script-thresholds.js
+k6 run script-thresholds-fail.js
 ```
 
-PASS run-д 30 VU үед p95=116.13 ms, throughput=145.203343 req/s, error rate=0.00% гарсан. Node серверийн 100ms delay тогтмол байснаар тогтвортой хариу гарсан.
+Баталгаажсан үр дүн:
+- Baseline: 5 VU / 30 s, p95=116.42 ms.
+- PASS: 30 VU / 1 min, p95=116.13 ms; `p(95)<300` болон `rate<0.01` босгууд биелсэн.
+- FAIL: 30 VU / 1 min, p95=115.32 ms; зориуд хатуу `p(95)<50` босго биелээгүй.
 
-FAIL run-д p95=115.32 ms, throughput=146.195226 req/s, error rate=0.00% гарсан ч `p(95)<50` threshold-аас давуулсан учраас quality gate FAIL болсон. Энэ нь функциональ тест pass байх ч performance SLO унаж болохыг харуулна.
+### 5.2 Нэмэлт saturation сервер — порт 3000
+
+`local-server/server.js` нь тусдаа сервер. `/fast` шууд хариу өгнө, `/slow` нь 100 ms асинхрон сааталтай, `/cpu` нь ойролцоогоор 3 ms CPU ажил хийж event loop-ыг блоклоно. Энэ туршилтын зорилго нь 8080 портын SLO үр дүнг орлуулах биш, I/O-bound ба CPU-bound endpoint-ийн зан төлөвийг ялгаж харах юм.
+
+PowerShell цонх 1:
+```bash
+node local-server/server.js
+```
+
+PowerShell цонх 2 — 5 VU / 30 s `/slow`:
+```bash
+k6 run -e ENDPOINT=slow --vus 5 --duration 30s script-local.js
+```
+
+PowerShell цонх 2 — 100 VU / 30 s `/cpu`:
+```bash
+k6 run -e ENDPOINT=cpu --vus 100 --duration 30s script-local.js
+```
+
+Холбогдох зураг: [08-local-slow-05vu.png](./screenshots/08-local-slow-05vu.png), [09-local-cpu-100vu.png](./screenshots/09-local-cpu-100vu.png). Эдгээр screenshot-ууд нь нэмэлт тестийн нотолгоо; харин тусдаа raw text log файл одоогоор `results/` хавтсанд байхгүй. Дахин ажиллуулахдаа гаралтыг хадгалах бол `| tee results/local-slow-05vu.txt` болон `| tee results/local-cpu-100vu.txt` гэж нэмнэ.
+
+### Screenshot-уудын индекс
+
+- [01-baseline-05vu-30s.png](./screenshots/01-baseline-05vu-30s.png) — локал baseline.
+- [02-run-05vu.png](./screenshots/02-run-05vu.png), [03-run-30vu.png](./screenshots/03-run-30vu.png), [04-run-100vu.png](./screenshots/04-run-100vu.png) — гадаад test.k6.io-ийн тус тусын VU тест.
+- [05-stages.png](./screenshots/05-stages.png) — stages тест.
+- [06-threshold-pass.png](./screenshots/06-threshold-pass.png), [07-threshold-fail.png](./screenshots/07-threshold-fail.png) — локал 8080 threshold тестүүд.
+- [08-local-slow-05vu.png](./screenshots/08-local-slow-05vu.png), [09-local-cpu-100vu.png](./screenshots/09-local-cpu-100vu.png) — локал 3000 нэмэлт saturation тестүүд.
+- [summary.png](./screenshots/summary.png) — нэгтгэсэн screenshot.
 
 ---
 
