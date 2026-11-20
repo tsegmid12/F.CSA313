@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   verify:
@@ -24,18 +24,19 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: maven
-      - name: Record toolchain
+      - name: Record toolchain and clear stale evidence
         run: |
           mkdir -p results
+          rm -f results/*.txt results/*.csv
           java -version 2>&1 | tee results/java-version.txt
           mvn -version 2>&1 | tee results/maven-version.txt
-      - name: All-defs stage
+      - name: All-defs stage (minimum set)
         run: |
           mvn -B -Dtest=BonusTest#allDefs_T1_allDefinitionsExceptInitialScore+allDefs_T2_initialScoreReachesBonusUse clean verify 2>&1 | tee results/mvn-verify-alldefs.txt
           cp target/site/jacoco/jacoco.csv results/jacoco-alldefs.csv
       - name: All-DU-pairs stage
         run: |
-          mvn -B -Dtest=GcdTest,BonusTest clean verify 2>&1 | tee results/mvn-verify-allpairs.txt
+          mvn -B -Dtest=GcdTest,BonusTest#DU_* clean verify 2>&1 | tee results/mvn-verify-allpairs.txt
           cp target/site/jacoco/jacoco.csv results/jacoco-allpairs.csv
       - name: Final complete suite
         run: |
@@ -50,36 +51,54 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           p=Path("src/main/java/mn/edu/must/sqat/DataFlowTargets.java")
-          s=p.read_text()
-          s=s.replace("streak = streak + 1;", "streak = streak;")
-          p.write_text(s)
+          p.write_text(p.read_text().replace("streak = streak + 1;", "streak = streak;"))
           PY
           mvn -B -Dtest=BonusTest test > results/mvn-test-M1.txt 2>&1
-          echo $? > results/mutant-M1-exit.txt
+          M1=$?
+          echo "$M1" > results/mutant-M1-exit.txt
           cp /tmp/DataFlowTargets.java "$SRC"
+
           python3 - <<'PY'
           from pathlib import Path
           p=Path("src/main/java/mn/edu/must/sqat/DataFlowTargets.java")
-          s=p.read_text().replace("best = streak;", "best = present;")
-          p.write_text(s)
+          p.write_text(p.read_text().replace("best = streak;", "best = present;"))
           PY
-          mvn -B -Dtest=BonusTest test > results/mvn-test-M2.txt 2>&1
-          echo $? > results/mutant-M2-exit.txt
+          mvn -B -Dtest=BonusTest#DU_* test > results/mvn-test-M2.txt 2>&1
+          M2=$?
+          echo "$M2" > results/mutant-M2-exit.txt
+          mvn -B -Dtest=BonusTest#M2Kill_bestUpdateUsesStreak test > results/mvn-test-M2-kill.txt 2>&1
+          M2K=$?
+          echo "$M2K" > results/mutant-M2-kill-exit.txt
           cp /tmp/DataFlowTargets.java "$SRC"
+
           python3 - <<'PY'
           from pathlib import Path
           p=Path("src/main/java/mn/edu/must/sqat/DataFlowTargets.java")
-          s=p.read_text().replace("int score = 0;", "int total = present + best;\n        int score = 0;")
-          p.write_text(s)
+          p.write_text(p.read_text().replace("int score = 0;", "int total = present + best;\n        int score = 0;"))
           PY
           mvn -B -Dtest=BonusTest test > results/mvn-test-M3.txt 2>&1
-          echo $? > results/mutant-M3-exit.txt
+          M3=$?
+          echo "$M3" > results/mutant-M3-exit.txt
           cp /tmp/DataFlowTargets.java "$SRC"
-          exit 0
+
+          # Expected: M1 killed, M2 survives DU suite, M2 kill test kills it,
+          # M3 survives runtime tests because its new definition is unused.
+          test "$M1" -ne 0 && test "$M2" -eq 0 && test "$M2K" -ne 0 && test "$M3" -eq 0
+      - name: Commit fresh Maven and JaCoCo evidence
+        if: success()
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lab-10/lab10-dataflow/results/
+          if ! git diff --cached --quiet; then
+            git commit -m "test(lab10): add fresh Maven and JaCoCo evidence"
+            git push
+          fi
       - name: Upload verification evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lab10-dataflow-results
-          path: lab-10/lab10-dataflow/results/
+          path: results/
           if-no-files-found: warn
