@@ -42,5 +42,14 @@
   </table>
 
   <p class="note">PASS тестийн бүх threshold амжилттай биелсэн. FAIL тестэд p(95) нь 50 ms босгыг давсан тул k6 threshold failure үүсгэж, exit code 99 буцаасан нь зориудын хүлээгдэж буй үр дүн юм.</p>
+
+  <h2>Additional local saturation tests — port 3000</h2>
+  <p>Эдгээр нэмэлт туршилтууд нь <code>local-server/server.js</code> сервер дээр хийгдсэн. Энэ сервер нь baseline болон threshold тестэд ашигласан 8080 портын <code>local-server.js</code>-ээс тусдаа.</p>
+  <ul>
+    <li><a href="./screenshots/08-local-slow-05vu.png">08-local-slow-05vu.png</a> — 5 VU, /slow endpoint.</li>
+    <li><a href="./screenshots/09-local-cpu-100vu.png">09-local-cpu-100vu.png</a> — 100 VU, /cpu endpoint.</li>
+  </ul>
+  <p class="note">Эдгээр нэмэлт туршилтын raw text output одоогоор results хавтсанд байхгүй тул энд тоон үзүүлэлт таамаглан оруулаагүй. Давтан ажиллуулахдаа output-ийг tee ашиглан хадгална.</p>
+
 </body>
 </html>
