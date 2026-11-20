@@ -43,10 +43,9 @@ public class GcdTest {
     void DU_x_def13_use16_17_and_y_def13_use15_16_18_oneIteration() {
         // gcd(4, 2): iter1: tmp=4%2=0, x=2, y=0 => loop exits, return 2
         // Covers: x def@13 -> use@16 (c-use, tmp=x%y)
-        //         x def@13 -> use@17 (c-use, x=y)
-        //         y def@13 -> use@15 p-use TRUE branch
+        //                 //         y def@13 -> use@15 p-use TRUE branch
         //         y def@13 -> use@16 (c-use, tmp=x%y)
-        //         y def@13 -> use@18 (c-use, y=tmp)
+        //         y def@13 -> use@17 (c-use, x=y)
         //         tmp def@16 -> use@18 (c-use, y=tmp)
         assertEquals(2, DataFlowTargets.gcd(4, 2));
     }
@@ -58,7 +57,7 @@ public class GcdTest {
         // Covers: tmp def@16 -> use@18
         //         y def@18 -> use@15 p-use TRUE (iteration 2 condition check)
         //         y def@18 -> use@16 (c-use in iteration 2)
-        //         y def@18 -> use@18 (c-use, re-assigned in iteration 2)
+        //         y def@18 -> use@17 (c-use, x=y in iteration 2)
         //         x def@17 -> use@16 (c-use, x used in next tmp=x%y)
         //         x def@17 -> use@17 (c-use, x=y, next iteration)
         assertEquals(4, DataFlowTargets.gcd(12, 8));
@@ -75,12 +74,12 @@ public class GcdTest {
 
     @Test
     @DisplayName("DU x def@17 use@16 across repeated iterations [pair: x(17->16)]")
-    void DU_x_def17_use17_threeIter() {
+    void DU_x_def17_use16_repeatedIterations() {
         // gcd(8, 6): iter1: tmp=2,x=6,y=2; iter2: tmp=0,x=2,y=0 => return 2
-        // Need 3+ iterations for x(def@17)->use@17:
+        // Repeated iterations exercise x(def@17)->use@16:
         // gcd(13, 8): iter1: tmp=5,x=8,y=5; iter2: tmp=3,x=5,y=3; iter3: tmp=2,x=3,y=2;
         //             iter4: tmp=1,x=2,y=1; iter5: tmp=0,x=1,y=0 => return 1
-        // Covers: x def@17 -> use@17 (x=y again in a later iteration)
+        // Covers: x def@17 -> use@16 (new x used by modulo in a later iteration)
         assertEquals(1, DataFlowTargets.gcd(13, 8));
     }
 
