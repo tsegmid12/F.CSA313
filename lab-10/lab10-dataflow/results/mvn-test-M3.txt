@@ -29,7 +29,7 @@
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
 [INFO] Running mn.edu.must.sqat.BonusTest
-[INFO] Tests run: 26, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.081 s -- in mn.edu.must.sqat.BonusTest
+[INFO] Tests run: 26, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.128 s -- in mn.edu.must.sqat.BonusTest
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -38,6 +38,6 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.955 s
-[INFO] Finished at: 2026-11-20T05:52:01Z
+[INFO] Total time:  2.850 s
+[INFO] Finished at: 2026-11-20T05:53:14Z
 [INFO] ------------------------------------------------------------------------
