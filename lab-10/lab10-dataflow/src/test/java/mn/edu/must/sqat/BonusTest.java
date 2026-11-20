@@ -7,14 +7,14 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Lab 10 - Section B4: bonus() all-defs then all-DU-pairs tests.
  *
- * bonus() variables and their defs (file line numbers):
+ * bonus() variables and their defs (DataFlowTargets.java line numbers):
  *   attendance: def@31 (param), use@32(p), use@38(p)
  *   threshold:  def@31 (param), use@32(p), use@50(p)
- *   present:    def@35 (init=0), def@40 (present+1), use@40(c), use@50(p), use@54(c) -- wait, use@50
- *   streak:     def@36 (init=0), def@41 (streak+1), def@46 (streak=0), use@41(c), use@42(p), use@54(c) -- wait
- *   best:       def@37 (init=0), def@43 (best=streak), use@42(p), use@53(p), use@54(c)
+ *   present:    def@35 (init=0), def@40 (present+1), use@40(c), use@50(p)
+ *   streak:     def@36 (init=0), def@41 (streak+1), def@46 (reset), use@41(c), use@42(p)
+ *   best:       def@37 (init=0), def@43 (best=streak), use@42(p), use@53(p)
  *   a:          def@38 (for-each assigns a), use@39(p)
- *   score:      def@49 (init=0), def@51 (score=5), def@54 (score=score+3), use@51(c), use@54(c), use@56(c)
+ *   score:      def@49 (init=0), def@51 (score=5), def@54 (score=score+3), use@54(c), use@56(c)
  *
  * ALL-DEFS: must reach a use from every def node.
  *   present def@35 -> use@40 (or use@50)   -- need any test where loop runs OR present>=threshold
