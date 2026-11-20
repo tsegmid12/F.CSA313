@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: lab10-rebuild-verification
+  cancel-in-progress: false
+
 jobs:
   verify-and-capture:
     runs-on: ubuntu-latest
@@ -101,5 +105,6 @@ jobs:
           git add lab-10/lab10-dataflow/results lab-10/lab10-dataflow/cfg-bonus.png
           if ! git diff --cached --quiet; then
             git commit -m "Lab 10: add Maven and JaCoCo evidence"
+            git pull --rebase origin lab10-rebuild
             git push origin HEAD:lab10-rebuild
           fi
