@@ -14,14 +14,14 @@ class BonusTest {
     @DisplayName("ALL_DEFS_score_initial_definition_reaches_bonus_addition")
     void allDefs_initialScoreDefinitionReachesBonusAddition() {
         assertEquals(3, DataFlowTargets.bonus(
-                new int[]{1, 1, 1, 1, 1}, 6));
+                new int[]{0, 1, 1, 1, 1, 1}, 7));
     }
 
     @Test
     @DisplayName("ALL_DEFS_score_base_definition_reaches_bonus_addition")
     void allDefs_baseScoreDefinitionReachesBonusAddition() {
         assertEquals(8, DataFlowTargets.bonus(
-                new int[]{1, 1, 1, 1, 1}, 5));
+                new int[]{0, 1, 1, 1, 1, 1}, 5));
     }
 
     // Stage 2: additional tests for predicate outcomes, loop paths, kills,
