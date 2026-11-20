@@ -10,8 +10,9 @@
 - `src/main/java/mn/edu/must/sqat/DataFlowTargets.java` — лабораторийн starter код. **Шинжилж буй эх кодыг өөрчлөөгүй.**
 - `src/test/java/mn/edu/must/sqat/GcdTest.java` — GCD функцийн all-DU-pairs тестүүд.
 - `src/test/java/mn/edu/must/sqat/BonusTest.java` — bonus функцийн all-defs, all-DU-pairs болон mutation-kill тестүүд.
-- `docs/cfg-bonus.png` — bonus функцийн CFG.
+- `cfg-bonus.png` — bonus функцийн CFG (репозиторийн lab10-dataflow root).
 - `docs/gcd-du-table.md`, `docs/bonus-du-table.md` — def-use, kill, def-clear path болон боломжгүй хосын тайлбар.
+- `docs/bonus-def-use.md` — B2 мөр бүрийн бүрэн def/c-use/p-use жагсаалт.
 - `results/` — CI-аар шинээр үүсгэсэн Maven log, JaCoCo CSV болон mutation туршилтын үр дүн.
 
 ## Орчны мэдээлэл
@@ -48,7 +49,7 @@ OS name: "linux", version: "7.0.0-1019-azure", arch: "amd64", family: "unix"
 
 ## A. GCD — all-DU-pairs
 
-GCD-ийн бүх reachable DU хосыг `docs/gcd-du-table.md`-д жагсаав. Assignment statement-ийн зүүн тал нь definition болохоос use биш гэдгийг тооцсон. Тухайлбал `x = y` мөрөнд `y` уншигдаж `x` тодорхойлогдоно; өмнөх `x`-ийн use үүсэхгүй. `y = tmp` мөрөнд `tmp` уншигдаж `y` тодорхойлогдоно; өмнөх `y`-ийн use үүсэхгүй. G1–G6 тестүүд loop skip, loop true/false, loop-carried definition болон return замуудыг хамарна.
+GCD-ийн бүх reachable DU хосыг доор болон `docs/gcd-du-table.md`-д жагсаав. Assignment statement-ийн зүүн тал нь definition болохоос use биш гэдгийг тооцсон. Тухайлбал `x = y` мөрөнд `y` уншигдаж `x` тодорхойлогдоно; өмнөх `x`-ийн use үүсэхгүй. `y = tmp` мөрөнд `tmp` уншигдаж `y` тодорхойлогдоно; өмнөх `y`-ийн use үүсэхгүй. G1–G6 тестүүд loop skip, loop true/false, loop-carried definition болон return замуудыг хамарна.
 
 ## B. Bonus — def/use болон all-defs
 
@@ -128,3 +129,132 @@ mvn clean verify
 ## Дүгнэлт
 
 Энэ лабораторийн ажлаар GCD болон bonus функцийн өгөгдлийн урсгалын definition, c-use, p-use болон kill харилцааг шинжилсэн. GCD функцийн DU хосыг assignment-ийн зүүн талын definition ба баруун талын use-ийг ялган тооцож засварласан. Bonus функцийн all-defs шалгуурт хоёр execution хангалттай болохыг score-ийн хоёр mutually exclusive замаар үндэслэсэн. All-DU-pairs тестүүдэд loop-carried definition, reset/recovery, predicate-ийн true/false болон score-ийн салбаруудыг тусгасан. Fault seeding-ээр streak өсөлт болон best update-ийн алдааг илрүүлэх тест нэмсэн. Ашиглагдахгүй definition нь runtime тестээр заавал илрэхгүй тул static analysis тусдаа шаардлагатайг M3 жишээгээр харуулсан. JaCoCo-ийн хуучин хувилбарын compatibility асуудлыг plugin шинэчлэлт болон JDK 17 CI орчноор шийдэхээр тохируулсан. Эцсийн үнэлгээг зөвхөн шинээр үүссэн Maven log, JaCoCo CSV, mutation log-оор баталгаажуулна.
+
+
+---
+
+## Хавсралт A1. GCD-ийн бүрэн DU хүснэгт
+
+# GCD DU table
+
+Source: `src/main/java/mn/edu/must/sqat/DataFlowTargets.java`.
+
+For a use at a statement, only variables read on the right-hand side or in the predicate are uses. An assignment target is a definition, not a use.
+
+| Variable | Def line | Use line | Kind | Test ID | Def-clear path |
+|---|---:|---:|---|---|---|
+| x | 13 | 16 | c-use | G2,G6 | entry x to modulo |
+| x | 13 | 20 | c-use | G1 | loop skipped, return x |
+| x | 17 | 16 | c-use | G3,G5 | x assigned from y, then used by next modulo |
+| x | 17 | 20 | c-use | G4 | final x assignment to return |
+| y | 13 | 15 | p-use T | G2 | entry y to loop predicate true |
+| y | 13 | 15 | p-use F | G1 | entry y to loop predicate false |
+| y | 13 | 16 | c-use | G2 | entry y to modulo |
+| y | 13 | 17 | c-use | G2 | entry y read as RHS of x=y |
+| y | 18 | 15 | p-use T | G3 | updated y to next loop predicate true |
+| y | 18 | 15 | p-use F | G4 | updated y to loop exit predicate false |
+| y | 18 | 16 | c-use | G3 | updated y to next modulo |
+| y | 18 | 17 | c-use | G3 | updated y read as RHS of x=y |
+| tmp | 16 | 18 | c-use | G2,G3 | modulo result to y=tmp |
+
+There is no `x@13 -> use@17`: line 17 reads `y`, not `x`. There is no `y -> use@18`: line 18 reads `tmp` and defines `y`; its left-hand side is not a use. Similarly, `x@17 -> use@17` is not a DU pair because line 17 does not read x. All listed pairs are feasible and def-clear.
+
+
+---
+
+## Хавсралт B2. Bonus мөр бүрийн Def/Use жагсаалт
+
+# Bonus B2 — Def/Use жагсаалт
+
+Энэ жагсаалт нь `DataFlowTargets.java` файлын бодит мөрийн дугаарыг ашиглав. Assignment-ийн RHS болон нөхцөлд уншигдсан хувьсагч use болно; LHS нь зөвхөн definition болно.
+
+| Мөр | Кодын үйлдэл | Definition (def) | c-use | p-use |
+|---:|---|---|---|---|
+| 31 | `bonus(int[] attendance, int threshold)` | `attendance@31`, `threshold@31` (параметрийн эхний def) | — | — |
+| 32 | `attendance == null || threshold < 0` | — | — | `attendance@31`, `threshold@31` (T/F; short-circuit нөхцөл) |
+| 33 | `throw ...` | — | — | — |
+| 35 | `int present = 0` | `present@35` | — | — |
+| 36 | `int streak = 0` | `streak@36` | — | — |
+| 37 | `int best = 0` | `best@37` | — | — |
+| 38 | `for (int a : attendance)` | `a@38` (давталт бүрт дараагийн элементийн def) | — | `attendance@31` (дараагийн элемент байгаа эсэх T/F) |
+| 39 | `if (a > 0)` | — | — | `a@38` (T/F) |
+| 40 | `present = present + 1` | `present@40` | `present@35/@40` (өмнөх утга) | — |
+| 41 | `streak = streak + 1` | `streak@41` | `streak@36/@41/@46` (өмнөх утга) | — |
+| 42 | `if (streak > best)` | — | — | `streak@41`, `best@37/@43` (T/F) |
+| 43 | `best = streak` | `best@43` | `streak@41` | — |
+| 46 | `streak = 0` (else) | `streak@46` | — | — |
+| 49 | `int score = 0` | `score@49` | — | — |
+| 50 | `if (present >= threshold)` | — | — | `present@35/@40`, `threshold@31` (T/F) |
+| 51 | `score = 5` | `score@51` | — | — |
+| 53 | `if (best >= 5)` | — | — | `best@37/@43` (T/F) |
+| 54 | `score = score + 3` | `score@54` | `score@49/@51` | — |
+| 56 | `return score` | — | `score@49/@51/@54` | — |
+
+## Kill / redefinition
+
+- `present@40` нь өмнөх `present@35` эсвэл `present@40`-ийг дараагийн давталтын assignment дээр дахин тодорхойлно.
+- `streak@41` нь өмнөх `streak@36`, `streak@41`, эсвэл `streak@46`-ийг дараагийн эерэг өдөр дахин тодорхойлно.
+- **Else-ийн `streak@46` нь өмнөх `streak@36` эсвэл `streak@41` definition-ийг шууд kill хийнэ.** Харин `streak@46` өөрөө дараагийн эерэг өдрийн line 41-ийн RHS use-д хүрч чадна.
+- `best@43` нь `best@37` эсвэл өмнөх `best@43`-ийг kill хийнэ.
+- `score@51` нь `score@49`-ийг kill хийнэ; `score@54` нь `score@49` эсвэл `score@51`-ийг kill хийнэ. `score@54`-ийн RHS use нь тухайн мөрийн өөрийн шинэ def-ээс өмнө уншигдах тул DU хос үүсгэнэ.
+
+## Def-clear ба биелэшгүй замын тайлбар
+
+- Foreach-ийн `attendance@31 -> loop@38` p-use нь массив хоосон эсэхээс хамаарч T/F хоёр ирмэгтэй.
+- `streak@46 -> use@42` хос боломжгүй: line 42 хүрэхийн өмнө эерэг өдөр line 41 дээр reset утгыг уншаад streak-ийг дахин тодорхойлно. Иймээс def-clear биш.
+- `streak@36 -> use@42` мөн боломжгүй: line 42 хүрэхийн өмнө line 41 streak-ийг дахин тодорхойлно.
+- `best@37 -> use@42` T боломжтой (эхний эерэг өдөр streak=1 > best=0); F боломжгүй, учир нь эхний эерэг өдөр заавал T болж best шинэчлэгдэнэ. Эерэг өдөр байхгүй бол line 42 огт хүрэхгүй.
+- `best@37 -> use@53` T боломжгүй: best анхны 0 хэвээр бол нөхцөл F; 5 буюу түүнээс дээш болгохын тулд line 43 дээр дахин def хийнэ.
+- Хүчингүй оролтын line 32 дахь throw нь функцийг дуусгадаг тул параметрийн def-үүд loop/body-ийн use-д хүрэхгүй.
+- `score@49 -> use@54` зөвхөн line 50 F үед боломжтой; `score@51 -> use@54` зөвхөн line 50 T үед боломжтой. Эдгээр нь mutually exclusive замууд.
+
+
+---
+
+## Хавсралт B3. Bonus-ийн бүрэн DU хүснэгт, kill ба боломжгүй хос
+
+# Bonus DU table
+
+`T1`–`T2` are the minimum all-defs tests. `T4` onward are targeted all-DU-pairs tests. Source line numbers refer to `DataFlowTargets.java`; a predicate pair is listed separately for its true and false edge.
+
+| Variable | Definition | Reachable use(s) | Kill / path condition | Test IDs |
+|---|---|---|---|---|
+| attendance | 31 parameter | 32 p-use T/F | null check at line 32; throw terminates invalid path | T4,T5 |
+| attendance | 31 parameter | 38 loop p-use T/F | empty vs non-empty array | T6,T7 |
+| threshold | 31 parameter | 32 p-use T/F | negative check; null attendance short-circuits threshold use | T5,T6,T7 |
+| threshold | 31 parameter | 50 p-use T/F | threshold compared after loop | T13,T14 |
+| present | 35 init | 40 c-use | first positive attendance reads init before redefining | T1,T2,T10 |
+| present | 35 init | 50 p-use T/F | empty loop preserves initial zero until threshold check | T6 |
+| present | 40 increment | 40 c-use | next positive day reads previous count before redefining | T10 |
+| present | 40 increment | 50 p-use T/F | final count compared with threshold | T11,T12 |
+| streak | 36 init | 41 c-use | first positive day reads initial streak | T1,T2,T22 |
+| streak | 41 increment | 41 c-use | next consecutive positive day reads previous streak | T1,T2,T22 |
+| streak | 41 increment | 42 p-use T/F | streak compared with best | T23,T24 |
+| streak | 46 reset | 41 c-use | next positive day reads reset value in `streak+1`, then redefines it | T8,T9,T26 |
+| best | 37 init | 42 p-use T | first positive day has streak 1 > initial best 0 | T1,T2,T26 |
+| best | 37 init | 53 p-use F | if no positive attendance occurs, best remains 0 | T15 |
+| best | 43 update | 42 p-use T/F | later reset can make a new streak no greater than saved best | T16,T24 |
+| best | 43 update | 53 p-use T/F | best may be below 5 after reset or at least 5 after long streak | T8,T17 |
+| a | 38 foreach element | 39 p-use T/F | current element is tested for positive/zero | T18,T19 |
+| score | 49 init | 54 c-use | base score branch skipped, streak bonus branch taken | T2,T17 |
+| score | 49 init | 56 c-use | both score-changing branches skipped | T21 |
+| score | 51 base score | 54 c-use | streak bonus adds 3 to base score | T20 |
+| score | 51 base score | 56 c-use | streak bonus branch skipped | T25 |
+| score | 54 streak bonus | 56 c-use | final score returned without another definition | T1,T2,T17,T20 |
+
+## Minimum all-defs argument
+
+Two executions are necessary because `score@49` reaches a later use only when the base-score predicate at line 50 is false, while `score@51` exists only when that predicate is true. These mutually exclusive paths cannot be covered in one execution.
+
+- **T1**: `[1,0,1,1,1,1,1]`, threshold `5`. It reaches the initial and loop-carried definitions, reset/recovery, best update, base score, and streak bonus.
+- **T2**: `[1,1,1,1,1]`, threshold `6`. It leaves `score@49` alive until line 54 and then uses `score@54` at return.
+
+## Infeasible pairs and interpretation
+
+- `best@37 -> use@42 FALSE` is infeasible: the first positive day sets streak to 1, which is always greater than the initial best 0; without a positive day, line 42 is not reached.
+- `best@37 -> use@53 TRUE` is infeasible: if best remains at its initial value 0, the predicate is false; if it becomes at least 5, line 43 has redefined it first.
+- `streak@36 -> use@42` is infeasible because line 41 redefines streak before line 42 is reached.
+- `streak@46 -> use@42` is infeasible because line 41 reads the reset value and redefines streak before line 42.
+- Validation throws at line 32 terminate execution, so parameter definitions on invalid paths cannot reach loop/body uses.
+- A definition cannot be paired with a later use if another definition of the same variable occurs first.
+
