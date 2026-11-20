@@ -2,7 +2,7 @@
 
 ## Оюутны мэдээлэл
 
-- Нэр: Э.Цэгмид
+- Нэр: Цэгмид Энхболд (Tsegmid Enkhbold)
 - Оюутны код: B232270107
 
 ## Төслийн бүтэц
@@ -73,7 +73,17 @@ Bonus функцийн бүх хувьсагчийн definition, c-use, p-use, k
 | M2 | `best = streak`-ийг `best = present` болгох | DU багцад амьд үлдэж болох ч `M2Kill_bestUpdateUsesStreak` тусгай тестээр унана |
 | M3 | Ашиглагдахгүй `total` definition нэмэх | Runtime тестүүд амьд үлдэнэ; unused-local/static-analysis анхааруулгаар илрүүлэх ёстой |
 
-Mutation log болон exit code-ууд `results/mvn-test-M1.txt`, `results/mvn-test-M2.txt`, `results/mvn-test-M2-kill.txt`, `results/mvn-test-M3.txt` болон `results/mutant-*-exit.txt` файлд байна. M3 нь dead definition тул runtime assertion түүнийг илрүүлэх боломжгүй; энэ нь static analysis-ийн зорилтот жишээ юм.
+Mutation log болон exit code-ууд `results/mvn-test-M1.txt`, `results/mvn-test-M2.txt`, `results/mvn-test-M2-kill.txt`, `results/mvn-test-M3.txt` болон `results/mutant-*-exit.txt` файлд байна. M3-ийн PMD тайлан `results/pmd-M3.txt`, `results/pmd-M3.xml` файлд хадгалагдсан.
+
+| Туршилт | Бодит үр дүн | Дүгнэлт |
+|---|---|---|
+| M1 | 26 тест, 5 failure | Mutant killed; exit code 1 |
+| M2 DU suite | 23 тест, 0 failure | Mutant survived; exit code 0 |
+| M2 kill test | 1 тест, 1 failure (`expected 5, actual 8`) | Mutant killed; exit code 1 |
+| M3 runtime suite | 26 тест, 0 failure | Runtime-аар survived; exit code 0 |
+| M3 PMD | `UnusedAssignment`, variable `total`, line 49 | Static analysis-аар илэрсэн |
+
+M3 нь dead definition тул runtime assertion түүнийг илрүүлэх боломжгүй; PMD-ийн `UnusedAssignment` дүрэм ашиглагдаагүй `total` хувьсагчийг бодитоор илрүүлсэн.
 
 ## Тестийн бодит үр дүн
 
@@ -92,6 +102,7 @@ Mutation log болон exit code-ууд `results/mvn-test-M1.txt`, `results/mvn
 | Final | 0 | 16 | 1 | 23 |
 
 Final suite-ийн branch coverage **16/16 = 100%**. Line coverage нь **23/24**; үлдсэн нэг missed line нь ашиглагддаггүй default constructor. Шинэ Maven log-ууд JaCoCo 0.8.16 ашигласан бөгөөд `BUILD SUCCESS`-ээр төгссөн.
+
 ## JaCoCo болон дахин давтагдах шалгалт
 
 `pom.xml` дахь JaCoCo 0.8.16 нь coverage тайлан үүсгэнэ. GitHub Actions workflow `.github/workflows/lab10-dataflow.yml` нь:
