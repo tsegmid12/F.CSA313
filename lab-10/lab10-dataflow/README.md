@@ -115,7 +115,7 @@ The exact metrics below are copied from the committed JaCoCo CSV files.
 
 | Run | Tests run | Branch missed | Branch covered | Line missed | Line covered | Instruction missed | Instruction covered |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| All-defs stage | 4 total (2 GCD + 2 bonus) | 5 | 11 | 3 | 21 | 10 | 71 |
+| All-defs stage | 4 total (2 GCD + 2 bonus) | 3 | 13 | 2 | 22 | 8 | 73 |
 | Final all-DU-pairs stage | 12 total (2 GCD + 10 bonus) | 0 | 16 | 1 | 23 | 3 | 78 |
 
 The final result is `BRANCH_MISSED = 0` (16/16 branches) and `LINE_MISSED = 1`, where the single missed line is the implicit Java constructor on source line 7. No test should instantiate `DataFlowTargets` just to cover that compiler-generated constructor.
