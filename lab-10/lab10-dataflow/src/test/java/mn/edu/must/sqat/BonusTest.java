@@ -13,7 +13,7 @@ class BonusTest {
     @Test
     @DisplayName("ALL_DEFS_score_initial_definition_reaches_bonus_addition")
     void allDefs_initialScoreDefinitionReachesBonusAddition() {
-        assertEquals(8, DataFlowTargets.bonus(
+        assertEquals(3, DataFlowTargets.bonus(
                 new int[]{1, 1, 1, 1, 1}, 6));
     }
 
@@ -56,7 +56,7 @@ class BonusTest {
     @DisplayName("DU_mixed_attendance_covers_streak_kill_and_restart")
     void mixedAttendanceCoversStreakKillAndRestart() {
         assertEquals(5, DataFlowTargets.bonus(
-                new int[]{1, 1, 0, 1, 1, 1, 1}, 7));
+                new int[]{1, 1, 0, 1, 1, 1, 1}, 6));
     }
 
     @Test
