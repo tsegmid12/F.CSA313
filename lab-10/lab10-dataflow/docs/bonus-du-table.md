@@ -7,7 +7,7 @@
 |---|---|---|---|---|---|
 | attendance | 31 | 32, 38 p-use | 32 validation | T4,T6,T7 | all feasible |
 | threshold | 31 | 32, 50 p-use | 32 validation | T5,T13,T14 | all feasible |
-| present | 35 | 50 p-use | 40 K | T1,T2,T3 | feasible |
+| present | 35 | 40 c-use, 50 p-use | 40 K | T1,T2,T3 | feasible |
 | present | 40 | 40 c-use, 50 p-use | 40 K | T10–T12 | feasible |
 | streak | 36 | 41 c-use, 42 p-use | 41 K | T1,T2 | feasible |
 | streak | 41 | 41 c-use, 42 p-use | 41/46 K | T22–T24 | feasible |
