@@ -27,8 +27,8 @@
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
 [INFO] Running mn.edu.must.sqat.BonusTest
-[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.061 s <<< FAILURE! -- in mn.edu.must.sqat.BonusTest
-[ERROR] mn.edu.must.sqat.BonusTest.M2Kill_bestUpdateUsesStreak -- Time elapsed: 0.029 s <<< FAILURE!
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.079 s <<< FAILURE! -- in mn.edu.must.sqat.BonusTest
+[ERROR] mn.edu.must.sqat.BonusTest.M2Kill_bestUpdateUsesStreak -- Time elapsed: 0.040 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: <5> but was: <8>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -52,8 +52,8 @@ org.opentest4j.AssertionFailedError: expected: <5> but was: <8>
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.346 s
-[INFO] Finished at: 2026-11-20T06:03:42Z
+[INFO] Total time:  2.095 s
+[INFO] Finished at: 2026-11-20T06:05:25Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.2.5:test (default-test) on project lab10-dataflow: There are test failures.
 [ERROR] 
