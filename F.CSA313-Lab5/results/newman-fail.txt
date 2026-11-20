@@ -4,29 +4,29 @@ Lab05 - Course Registration
 
 □ TC1 - Happy Path
 └ Setup Student
-  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 17ms]
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 20ms]
 
 └ Setup Course
   PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
 
 └ Register
-  POST http://localhost:3000/registrations [201 Created, 202B, 2ms]
+  POST http://localhost:3000/registrations [201 Created, 202B, 3ms]
   1. Status is 201
   √  Result is OK
   √  RegistrationID is a number
 
 □ TC2 - No Student
 └ Setup Course
-  PUT http://localhost:3000/courses/CS101 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS101 [200 OK, 178B, 3ms]
 
 └ Register
-  POST http://localhost:3000/registrations [200 OK, 192B, 2ms]
+  POST http://localhost:3000/registrations [200 OK, 192B, 3ms]
   √  Status is 200
   √  Result is ERROR_NO_STUDENT
 
 □ TC3 - Inactive Student
 └ Setup Student
-  PUT http://localhost:3000/students/S2 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/students/S2 [200 OK, 178B, 2ms]
 
 └ Setup Course
   PUT http://localhost:3000/courses/CS101 [200 OK, 178B, 2ms]
@@ -38,22 +38,22 @@ Lab05 - Course Registration
 
 □ TC4 - No Course
 └ Setup Student
-  PUT http://localhost:3000/students/S3 [200 OK, 178B, 2ms]
+  PUT http://localhost:3000/students/S3 [200 OK, 178B, 3ms]
 
 └ Register
-  POST http://localhost:3000/registrations [200 OK, 191B, 1ms]
+  POST http://localhost:3000/registrations [200 OK, 191B, 2ms]
   √  Status is 200
   √  Result is ERROR_NO_COURSE
 
 □ TC5 - Missing Prereqs
 └ Setup Student
-  PUT http://localhost:3000/students/S4 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/students/S4 [200 OK, 178B, 3ms]
 
 └ Setup Course
-  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 3ms]
 
 └ Register
-  POST http://localhost:3000/registrations [200 OK, 215B, 1ms]
+  POST http://localhost:3000/registrations [200 OK, 215B, 2ms]
   √  Status is 200
   √  Result is ERROR_PREREQUISITES
 
@@ -68,7 +68,7 @@ Lab05 - Course Registration
   PUT http://localhost:3000/students/S5 [200 OK, 178B, 1ms]
 
 └ Setup Course
-  PUT http://localhost:3000/courses/CS101 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/courses/CS101 [200 OK, 178B, 2ms]
 
 └ Register
   POST http://localhost:3000/registrations [201 Created, 202B, 1ms]
@@ -77,13 +77,13 @@ Lab05 - Course Registration
 
 □ TC8 - Empty Courses
 └ Setup Student
-  PUT http://localhost:3000/students/S6 [200 OK, 178B, 1ms]
+  PUT http://localhost:3000/students/S6 [200 OK, 178B, 2ms]
 
 └ Setup Course
   PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
 
 └ Register
-  POST http://localhost:3000/registrations [200 OK, 215B, 1ms]
+  POST http://localhost:3000/registrations [200 OK, 215B, 2ms]
   √  Status is 200
   √  Result is ERROR_PREREQUISITES
 
@@ -95,7 +95,7 @@ Lab05 - Course Registration
 
 □ TC10 - JSONPlaceholder Users
 └ GET Users
-  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.61kB, 32ms]
+  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.62kB, 47ms]
   √  Status is 200
   √  Response is an array
   √  First user name is correct
@@ -117,7 +117,7 @@ Lab05 - Course Registration
 ├─────────────────────────────────────────────────────────────┤
 │ total data received: 6.15kB (approx)                        │
 ├─────────────────────────────────────────────────────────────┤
-│ average response time: 3ms [min: 1ms, max: 32ms, s.d.: 7ms] │
+│ average response time: 5ms [min: 1ms, max: 47ms, s.d.: 9ms] │
 └─────────────────────────────────────────────────────────────┘
 
 [31m  # [39m[31m failure        [39m[31m detail                                                [39m

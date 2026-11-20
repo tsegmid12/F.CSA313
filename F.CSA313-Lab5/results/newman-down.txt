@@ -116,7 +116,7 @@ Lab05 - Course Registration
 
 □ TC10 - JSONPlaceholder Users
 └ GET Users
-  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.6kB, 60ms]
+  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.6kB, 61ms]
   √  Status is 200
   √  Response is an array
   √  First user name is correct
@@ -138,7 +138,7 @@ Lab05 - Course Registration
 ├───────────────────────────────────────────────────────────────┤
 │ total data received: 5.65kB (approx)                          │
 ├───────────────────────────────────────────────────────────────┤
-│ average response time: 2ms [min: 60ms, max: 60ms, s.d.: 12ms] │
+│ average response time: 2ms [min: 61ms, max: 61ms, s.d.: 12ms] │
 └───────────────────────────────────────────────────────────────┘
 
 [31m   # [39m[31m failure        [39m[31m detail                                                   [39m
