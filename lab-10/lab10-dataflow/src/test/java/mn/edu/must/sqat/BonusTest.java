@@ -225,7 +225,7 @@ public class BonusTest {
     }
 
     @Test
-    @DisplayName("DUPairs-T25: score def@51->use@56 (no streak bonus) and score def@49->use@51 [pairs: score(51->56) no54]")
+    @DisplayName("DUPairs-T25: score def@51->use@56 (no streak bonus) [pair: score(51->56)]")
     void DU_score_def51_use56_noStreakBonus() {
         // present>=threshold, but best<5 => score=5 (def@51) -> return 5 (use@56, skips line 54)
         assertEquals(5, DataFlowTargets.bonus(new int[]{1, 1, 1}, 3));
