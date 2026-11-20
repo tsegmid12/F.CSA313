@@ -75,7 +75,7 @@ The CFG is intended to show the validation guard, the enhanced-for iteration (th
 | Variable | Def line | Use line | Use type | Def-clear condition / note | Test ID |
 |---|---:|---:|---|---|---|
 | attendance | parameter | 32 | p | Guard reads the parameter | invalidNullAttendanceTakesGuardTrue / invalidNegativeThresholdTakesGuardTrue |
-| attendance | parameter | 38 | p | Iteration checks for another element | allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| attendance | parameter | 38 | p | Iteration checks for another element | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / allAbsentCoversElseResetAndNoBonus / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore |
 | threshold | parameter | 32 | p | Negative-threshold check is evaluated when attendance is non-null | invalidNegativeThresholdTakesGuardTrue |
 | threshold | parameter | 50 | p | Valid input reaches the score threshold decision | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
 | a | 38 | 39 | p | Each fetched element is tested before next assignment | allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
@@ -85,11 +85,11 @@ The CFG is intended to show the validation guard, the enhanced-for iteration (th
 | present | 40 | 50 | p | Last count definition reaches threshold decision | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
 | streak | 36 | 41 | c | First element is present | longStreakCoversBestUpdateAndAdditionalScore |
 | streak | 41 | 41 | c | Consecutive present days carry the previous streak | longStreakCoversBestUpdateAndAdditionalScore |
-| streak | 41 | 42 | p | Updated streak is compared with best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
-| streak | 46 | 41 | c | A present day follows an absent day; reset value is incremented | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart |
+| streak | 41 | 42 | p | Updated streak is compared with best | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| streak | 46 | 41 | c | A present day follows an absent day; reset value is incremented | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart |
 | best | 37 | 42 | p | First present day compares streak with initial best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
 | best | 37 | 53 | p | No positive attendance ever redefines best | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
-| best | 43 | 42 | p | A later positive day compares with the previous best | longStreakCoversBestUpdateAndAdditionalScore / mixedAttendanceCoversStreakKillAndRestart |
+| best | 43 | 42 | p | A later positive day compares with the previous best | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore / mixedAttendanceCoversStreakKillAndRestart |
 | best | 43 | 53 | p | Final best reaches the bonus decision without another best update | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
 | score | 49 | 54 | c | Threshold is false and the streak condition is true | allDefs_initialScoreDefinitionReachesBonusAddition |
 | score | 49 | 56 | c | Threshold and streak bonus are both false | allAbsentCoversElseResetAndNoBonus |
@@ -105,7 +105,7 @@ The foreach p-use has a true outcome when an element exists and a false outcome 
 
 ### B4. Two-stage test design
 
-**All-defs minimum: two tests.** Two are necessary because the two definitions of `score` at lines 49 and 51 cannot both reach the line-54 use in one execution: if the threshold branch is true, line 51 redefines score and kills the line-49 definition before the +3 calculation. The first all-defs test makes the threshold condition false and the streak condition true, so the line-49 definition reaches line 54. The second makes the threshold condition true and the streak condition true, so line 51 reaches line 54. The tests are retained as the first stage in the commit history.
+**All-defs minimum: two tests.** Two are necessary because the two definitions of `score` at lines 49 and 51 cannot both reach the line-54 use in one execution: if the threshold branch is true, line 51 redefines score and kills the line-49 definition before the +3 calculation. Both all-defs tests use attendance `{1, 0, 1, 1, 1, 1, 1}`. The first uses threshold 7, making the threshold condition false and the streak condition true, so the line-49 definition reaches line 54. The second uses threshold 6, making the threshold condition true and the streak condition true, so line 51 reaches line 54. The leading present day followed by an absence and then a five-day run also makes the initial streak definition and the line-46 reset definition each reach a later line-41 use. The tests are retained as the first stage in the commit history.
 
 **All-DU-pairs stage.** Additional tests cover null and negative validation, empty input, all-absent input, mixed attendance with a streak reset, a long streak, and a short streak. The tests have Latin-only method names and display names so their console output remains readable on Windows.
 
