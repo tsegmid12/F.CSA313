@@ -91,10 +91,11 @@ jobs:
           root=ET.parse(report).getroot()
           matches=[]
           for violation in root.findall(".//violation"):
-              if violation.attrib.get("rule") == "UnusedLocalVariable":
+              if violation.attrib.get("rule") == "UnusedAssignment":
                   matches.append((violation.attrib.get("beginline"), (violation.text or "").strip()))
+          print("PMD violations:", [(v.attrib.get("rule"), (v.text or "").strip()) for v in root.findall(".//violation")])
           if not matches:
-              raise SystemExit("PMD did not report the unused M3 local variable")
+              raise SystemExit("PMD did not report the unused M3 local assignment")
           print("PMD detected unused local:", matches)
           PY
           PMD_CHECK=$?
@@ -119,5 +120,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lab10-dataflow-results
-          path: results/
+          path: lab-10/lab10-dataflow/results/
           if-no-files-found: warn
