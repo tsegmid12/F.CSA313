@@ -64,11 +64,12 @@ public class BonusTest {
     }
 
     @Test
-    @DisplayName("DUPairs-T6: empty attendance, threshold=0 => score=5 [pair: attendance(31->38 p-use F=empty loop)]")
+    @DisplayName("DUPairs-T6: empty attendance reaches present@50 true and false edges")
     void DU_attendance_def31_use38_emptyLoop() {
-        // attendance=[] => for loop never entered; present=0>=0 => score=5
-        // Covers: attendance def@31 -> use@38 p-use (loop condition, FALSE path - empty array)
+        // Empty array skips the loop, so present@35 reaches both outcomes of line 50.
+        // Covers attendance@31 -> loop predicate false, present@35 -> predicate true/false.
         assertEquals(5, DataFlowTargets.bonus(new int[]{}, 0));
+        assertEquals(0, DataFlowTargets.bonus(new int[]{}, 1));
     }
 
     @Test
