@@ -2,27 +2,45 @@
 <html lang="mn">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lab 2 k6 summary</title>
   <style>
-    body { font-family: Segoe UI, sans-serif; margin: 32px; color: #202124; }
+    body { font-family: Segoe UI, sans-serif; margin: 32px; color: #202124; line-height: 1.5; }
     h1 { margin-bottom: 8px; }
-    table { border-collapse: collapse; min-width: 760px; }
+    table { border-collapse: collapse; width: 100%; max-width: 900px; margin: 12px 0 24px; }
     th, td { border: 1px solid #bbb; padding: 10px 12px; text-align: right; }
     th { background: #eef3f8; }
     td:first-child, th:first-child { text-align: left; }
+    .pass { color: #137333; font-weight: 700; }
+    .fail { color: #b3261e; font-weight: 700; }
+    .note { color: #5f6368; }
   </style>
 </head>
 <body>
   <h1>k6 load test summary</h1>
-  <p>Target: https://test.k6.io (5/30/100 VU) and local server (threshold tests)</p>
+  <p>Энэ тайланд хоёр төрлийн туршилтын үр дүнг тусад нь харуулав: ачааллын шаталсан тестүүд нь <code>https://test.k6.io</code>, baseline болон threshold тестүүд нь локал <code>http://127.0.0.1:8080/slow</code> endpoint дээр хийгдсэн.</p>
+
+  <h2>Baseline — local /slow</h2>
+  <table>
+    <tr><th>VU</th><th>Duration</th><th>p90</th><th>p95</th><th>Requests</th><th>Error rate</th></tr>
+    <tr><td>5</td><td>30 s</td><td>114.83 ms</td><td>116.42 ms</td><td>140</td><td>0.00%</td></tr>
+  </table>
+
+  <h2>Load tests — test.k6.io</h2>
   <table>
     <tr><th>VU</th><th>p90</th><th>p95</th><th>Throughput</th><th>Error rate</th></tr>
     <tr><td>5</td><td>241.43 ms</td><td>246.34 ms</td><td>7.459878 req/s</td><td>0.00%</td></tr>
     <tr><td>30</td><td>245.42 ms</td><td>252.33 ms</td><td>43.7969 req/s</td><td>0.00%</td></tr>
     <tr><td>100</td><td>244.84 ms</td><td>251.83 ms</td><td>146.213849 req/s</td><td>0.00%</td></tr>
   </table>
-  <h2>Threshold results</h2>
-  <p><strong>PASS:</strong> p(95)&lt;300 — p(95)=115.55 ms, error rate=0.00%</p>
-  <p><strong>FAIL:</strong> p(95)&lt;50 — p(95)=115.15 ms, threshold crossed</p>
+
+  <h2>Threshold tests — local /slow (30 VU, 1 min)</h2>
+  <table>
+    <tr><th>Test</th><th>Threshold</th><th>Actual result</th><th>Error rate</th><th>Status</th></tr>
+    <tr><td>PASS</td><td>p(95) &lt; 300 ms</td><td>116.13 ms</td><td>0.00%</td><td class="pass">PASSED</td></tr>
+    <tr><td>FAIL</td><td>p(95) &lt; 50 ms</td><td>115.32 ms</td><td>0.00%</td><td class="fail">FAILED AS EXPECTED</td></tr>
+  </table>
+
+  <p class="note">PASS тестийн бүх threshold амжилттай биелсэн. FAIL тестэд p(95) нь 50 ms босгыг давсан тул k6 threshold failure үүсгэж, exit code 99 буцаасан нь зориудын хүлээгдэж буй үр дүн юм.</p>
 </body>
 </html>
