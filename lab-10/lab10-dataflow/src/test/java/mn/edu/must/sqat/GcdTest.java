@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * Lab 10 - Section A: GCD all-DU-pairs coverage tests.
  *
  * DU pairs covered (file line numbers):
- *   x: def@13, use@16(c), use@17(c), use@20(c)
- *   y: def@13, use@15(p), use@16(c), use@18(c)
- *   y: def@18, use@15(p), use@16(c), use@18(c)
+ *   x: def@13, use@16(c), use@20(c)
+ *   y: def@13, use@15(p), use@16(c), use@17(c)
+ *   y: def@18, use@15(p), use@16(c), use@17(c)
  *   tmp: def@16, use@18(c)
- *   x: def@17, use@16(c), use@17(c), use@20(c)
+ *   x: def@17, use@16(c), use@20(c)
  *
  * Test method naming: DU_<var>_def<defLine>_use<useLine>[_<suffix>]
  */
@@ -39,7 +39,7 @@ public class GcdTest {
     }
 
     @Test
-    @DisplayName("DU x def@13 use@16+17 and y def@13 use@15(T)+16+18: one iteration [pairs: x(13->16,17) y(13->15,16,18)]")
+    @DisplayName("DU x def@13 use@16+17 and y def@13 use@15(T)+16+18: one iteration [pairs: x(13->16) y(13->15,16,17)]")
     void DU_x_def13_use16_17_and_y_def13_use15_16_18_oneIteration() {
         // gcd(4, 2): iter1: tmp=4%2=0, x=2, y=0 => loop exits, return 2
         // Covers: x def@13 -> use@16 (c-use, tmp=x%y)
@@ -52,7 +52,7 @@ public class GcdTest {
     }
 
     @Test
-    @DisplayName("DU tmp def@16 use@18 and y def@18 use@15 TRUE: multi-iteration [pairs: tmp(16->18) y(18->15,16,18)]")
+    @DisplayName("DU tmp def@16 use@18 and y def@18 use@15 TRUE: multi-iteration [pairs: tmp(16->18) y(18->15,16,17)]")
     void DU_tmp_def16_use18_and_y_def18_uses_multiIteration() {
         // gcd(12, 8): iter1: tmp=4, x=8, y=4; iter2: tmp=0, x=4, y=0 => return 4
         // Covers: tmp def@16 -> use@18
@@ -74,7 +74,7 @@ public class GcdTest {
     }
 
     @Test
-    @DisplayName("DU x def@17 use@17 multi-iter: three iterations [pair: x(17->17)]")
+    @DisplayName("DU x def@17 use@16 across repeated iterations [pair: x(17->16)]")
     void DU_x_def17_use17_threeIter() {
         // gcd(8, 6): iter1: tmp=2,x=6,y=2; iter2: tmp=0,x=2,y=0 => return 2
         // Need 3+ iterations for x(def@17)->use@17:
