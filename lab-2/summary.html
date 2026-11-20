@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="mn">
+<head>
+  <meta charset="utf-8">
+  <title>Lab 2 k6 summary</title>
+  <style>
+    body { font-family: Segoe UI, sans-serif; margin: 32px; color: #202124; }
+    h1 { margin-bottom: 8px; }
+    table { border-collapse: collapse; min-width: 760px; }
+    th, td { border: 1px solid #bbb; padding: 10px 12px; text-align: right; }
+    th { background: #eef3f8; }
+    td:first-child, th:first-child { text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>k6 load test summary</h1>
+  <p>Target: https://test.k6.io (5/30/100 VU) and local server (threshold tests)</p>
+  <table>
+    <tr><th>VU</th><th>p90</th><th>p95</th><th>Throughput</th><th>Error rate</th></tr>
+    <tr><td>5</td><td>241.43 ms</td><td>246.34 ms</td><td>7.459878 req/s</td><td>0.00%</td></tr>
+    <tr><td>30</td><td>245.42 ms</td><td>252.33 ms</td><td>43.7969 req/s</td><td>0.00%</td></tr>
+    <tr><td>100</td><td>244.84 ms</td><td>251.83 ms</td><td>146.213849 req/s</td><td>0.00%</td></tr>
+  </table>
+  <h2>Threshold results</h2>
+  <p><strong>PASS:</strong> p(95)&lt;300 — p(95)=115.55 ms, error rate=0.00%</p>
+  <p><strong>FAIL:</strong> p(95)&lt;50 — p(95)=115.15 ms, threshold crossed</p>
+</body>
+</html>
