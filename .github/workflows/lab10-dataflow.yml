@@ -7,6 +7,10 @@ on:
       - ".github/workflows/lab10-dataflow.yml"
   workflow_dispatch:
 
+concurrency:
+  group: lab10-dataflow-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -110,10 +114,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git rebase origin/main
           git add lab-10/lab10-dataflow/results/
           if ! git diff --cached --quiet; then
             git commit -m "test(lab10): add fresh Maven and JaCoCo evidence"
-            git push
+            git push origin HEAD:main
           fi
       - name: Upload verification evidence
         if: always()
