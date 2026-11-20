@@ -38,7 +38,7 @@ public class GcdTest {
 
     @Test
     @DisplayName("DU x def@13 use@16 and y def@13 use@15(T)+16+17: one iteration [pairs: x(13->16) y(13->15,16,17)]")
-    void DU_x_def13_use16_17_and_y_def13_use15_16_18_oneIteration() {
+    void DU_x_def13_use16_and_y_def13_use15_16_17_oneIteration() {
         // gcd(4, 2): iter1: tmp=4%2=0, x=2, y=0 => loop exits, return 2
         // Covers: x def@13 -> use@16 (c-use, tmp=x%y)
         //         y def@13 -> use@15 p-use TRUE branch
