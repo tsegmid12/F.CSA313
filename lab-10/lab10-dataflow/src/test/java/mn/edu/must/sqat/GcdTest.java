@@ -22,9 +22,7 @@ public class GcdTest {
     // DU pairs for variable x:
     //   (x, def@13, use@20)  -- y==0 on first check, loop never entered
     //   (x, def@13, use@16)  -- loop entered at least once, x used at line 16
-    //   (x, def@13, use@17)  -- loop entered, x=y at line 17
     //   (x, def@17, use@16)  -- after first iteration, new x used at line 16
-    //   (x, def@17, use@17)  -- multiple iterations, x keeps being reassigned
     //   (x, def@17, use@20)  -- last iteration, x returned
     // -------------------------------------------------------------------------
 
@@ -39,11 +37,11 @@ public class GcdTest {
     }
 
     @Test
-    @DisplayName("DU x def@13 use@16+17 and y def@13 use@15(T)+16+18: one iteration [pairs: x(13->16) y(13->15,16,17)]")
+    @DisplayName("DU x def@13 use@16 and y def@13 use@15(T)+16+17: one iteration [pairs: x(13->16) y(13->15,16,17)]")
     void DU_x_def13_use16_17_and_y_def13_use15_16_18_oneIteration() {
         // gcd(4, 2): iter1: tmp=4%2=0, x=2, y=0 => loop exits, return 2
         // Covers: x def@13 -> use@16 (c-use, tmp=x%y)
-        //                 //         y def@13 -> use@15 p-use TRUE branch
+        //         y def@13 -> use@15 p-use TRUE branch
         //         y def@13 -> use@16 (c-use, tmp=x%y)
         //         y def@13 -> use@17 (c-use, x=y)
         //         tmp def@16 -> use@18 (c-use, y=tmp)
@@ -59,7 +57,6 @@ public class GcdTest {
         //         y def@18 -> use@16 (c-use in iteration 2)
         //         y def@18 -> use@17 (c-use, x=y in iteration 2)
         //         x def@17 -> use@16 (c-use, x used in next tmp=x%y)
-        //         x def@17 -> use@17 (c-use, x=y, next iteration)
         assertEquals(4, DataFlowTargets.gcd(12, 8));
     }
 
