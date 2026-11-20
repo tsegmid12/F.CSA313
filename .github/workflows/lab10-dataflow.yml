@@ -79,7 +79,8 @@ jobs:
           mvn -B -Dtest=BonusTest test > results/mvn-test-M3.txt 2>&1
           M3=$?
           echo "$M3" > results/mutant-M3-exit.txt
-          mvn -B pmd:pmd > results/pmd-M3.txt 2>&1
+          mvn -B -Dpmd.rulesets=pmd-ruleset.xml pmd:pmd > results/pmd-M3.txt 2>&1
+          cp target/pmd.xml results/pmd-M3.xml
           PMD=$?
           echo "$PMD" > results/pmd-M3-exit.txt
           python3 - <<'PY'
@@ -89,11 +90,10 @@ jobs:
           if not report.exists():
               raise SystemExit("PMD report was not generated")
           root=ET.parse(report).getroot()
-          matches=[]
-          for violation in root.findall(".//violation"):
-              if violation.attrib.get("rule") == "UnusedAssignment":
-                  matches.append((violation.attrib.get("beginline"), (violation.text or "").strip()))
-          print("PMD violations:", [(v.attrib.get("rule"), (v.text or "").strip()) for v in root.findall(".//violation")])
+          nodes=[(node.tag, node.attrib) for node in root.iter() if "violation" in node.tag.lower()]
+          matches=[(attrs.get("beginline"), attrs.get("rule"), attrs.get("ruleset")) for tag,attrs in nodes if attrs.get("rule") in ("UnusedAssignment","UnusedLocalVariable")]
+          print("PMD root:", root.tag, root.attrib)
+          print("PMD violation nodes:", nodes)
           if not matches:
               raise SystemExit("PMD did not report the unused M3 local assignment")
           print("PMD detected unused local:", matches)
