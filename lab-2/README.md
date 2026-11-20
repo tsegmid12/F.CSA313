@@ -23,24 +23,24 @@
 
 ---
 
-## Алхам 2 — Анхны тест ба baseline
+## Алхам 2 — Локал `/slow` endpoint-ийн baseline
 
-Анхны тест 5 VU, 1 минутын үргэлжлэлтэй ажиллуулсан. `script.js` нь `https://test.k6.io` рүү GET хүсэлт илгээж, status=200 байхыг `check`-ээр шалгадаг.
+SLO болон PASS/FAIL-г нэг endpoint дээр харьцуулахын тулд анхны baseline-г локал `/slow` endpoint дээр 5 VU, 30 секундээр хэмжсэн.
 
 ```bash
-k6 run --vus 5 --duration 1m script.js | tee results/run-05vu.txt
+k6 run script-baseline.js | tee results/run-baseline-05vu-30s.txt
 ```
 
 | Хэмжүүр | Утга | Лекцийн ойлголт |
 |---|---:|---|
-| `http_req_duration` avg | 157.36 ms | дундаж хариу өгөх хугацаа |
-| `http_req_duration` p(90) | 241.43 ms | 90%-ийн хүсэлтийн latency |
-| **`http_req_duration` p(95)** | **246.34 ms** | **BASELINE — SLO-гоо энэ хэмжилтээс гаргав** |
-| `http_reqs` | 456 (7.459878 req/s) | throughput |
-| `http_req_failed` | 0.00% (0/456) | error rate |
-| `checks_succeeded` | 100.00% (228/228) | бүх 200 хариу status-д давсан |
+| `http_req_duration` avg | 107.57 ms | дундаж хариу өгөх хугацаа |
+| `http_req_duration` p(90) | 114.83 ms | 90%-ийн хүсэлтийн latency |
+| **`http_req_duration` p(95)** | **116.42 ms** | **Энэ endpoint-ийн BASELINE — доорх SLO-г эндээс гаргав** |
+| `http_reqs` | 140 (4.510799 req/s) | throughput |
+| `http_req_failed` | 0.00% (0/140) | error rate |
+| `checks_succeeded` | 100.00% (140/140) | бүх хүсэлт 200 status-д давсан |
 
-Бүтэн гаралт: [results/run-05vu.txt](./results/run-05vu.txt). Скрипт нь sleep(1) ашигласны улмаас 5 VU дор throughput нь хэрэглэгчийн wait time-аар хязгаарлагдсан.
+Бүтэн гаралт: [results/run-baseline-05vu-30s.txt](./results/run-baseline-05vu-30s.txt).
 
 ---
 
@@ -80,45 +80,45 @@ Stages test `5 → 30 → 100 → 0 VU` хувилбарт ажиллав. Нэ�
 
 | SLO | Утга | Яагаад сонгосон |
 |---|---|---|
-| `http_req_duration: p(95)<300` | 300 ms | Өөрийн 5 VU baseline p95=246.34 ms дээр 300 ms нь ердийн network variation-д ачаалсан 53.66 ms-ийн margin өгдөг |
+| `http_req_duration: p(95)<300` | 300 ms | Эцсийн `/slow` baseline p95=116.42 ms тул 300 ms нь 183.58 ms-ын margin өгдөг |
 | `http_req_failed: rate<0.01` | 1%-ээс бага | Алдааны түвшинг лекцийн availability ≥99%-тэй нийцүүлсэн |
 
-Зааврын жишээ `<300` шууд биш өөрийн baseline дээр үндэслэн сонгосон боловч локал серверийн 100ms endpoint-д бол энэ threshold бодитой бөгөөд stable PASS гарсан.
+Эцсийн SLO нь `test.k6.io`-ийн гадаад сүлжээний baseline-ээс биш `/slow` endpoint-ийн өөрийн 5 VU/30с baseline-аас гаргасан. Түүнчлэн PASS/FAIL туршилтыг мөн яг тэр `/slow` endpoint дээр ажиллуулсан.
 
 ### PASS
 
 ```bash
 node local-server.js
-k6 run threshold-pass.js | tee results/threshold-pass.txt
+k6 run script-thresholds.js | tee results/run-threshold-pass.txt
 ```
 
-`threshold-pass.js` тест нь 30 VU, 1 минут ажиллан дараах үр дүн гаргасан:
+Эцсийн PASS скрипт нь `script-thresholds.js`, 30 VU, 1 минут, `/slow` endpoint дээр ажиллана:
 
 ```text
 http_req_duration
-✓ 'p(95)<300' p(95)=115.55ms
+✓ 'p(95)<300' p(95)=116.13ms
 http_req_failed
 ✓ 'rate<0.01' rate=0.00%
 ```
 
-Бүтэн гаралт: [results/threshold-pass.txt](./results/threshold-pass.txt). Exit code 0 байсан.
+Бүтэн гаралт: [results/run-threshold-pass.txt](./results/run-threshold-pass.txt). Exit code 0 байсан.
 
 ### FAIL
 
 ```bash
-k6 run threshold-fail.js | tee results/threshold-fail.txt
+k6 run script-thresholds-fail.js 2>&1 | tee results/run-threshold-fail.txt
 ```
 
 Санаатайгоор хурдан 100ms endpoint-д зориулж боломжгүй `<50ms` threshold сонгосон:
 
 ```text
 http_req_duration
-✗ 'p(95)<50' p(95)=115.15ms
+✗ 'p(95)<50' p(95)=115.32ms
 http_req_failed
 ✓ 'rate<0.01' rate=0.00%
 ```
 
-Бүтэн гаралт: [results/threshold-fail.txt](./results/threshold-fail.txt). k6 threshold cross болсон учраас exit code 99 буцсан бөгөөд CI quality gate үүнийг build deploy-ээс зогсооход ашиглаж болно.
+Бүтэн гаралт: [results/run-threshold-fail.txt](./results/run-threshold-fail.txt). k6 threshold cross болсон учраас exit code 99 буцсан бөгөөд CI quality gate үүнийг build/deploy-ээс зогсооход ашиглаж болно.
 
 ---
 
@@ -128,21 +128,22 @@ http_req_failed
 
 ```bash
 node local-server.js
-k6 run --vus 30 --duration 1m threshold-pass.js
+k6 run script-thresholds.js | tee results/run-threshold-pass.txt
+k6 run script-thresholds-fail.js | tee results/run-threshold-fail.txt
 ```
 
-PASS run-д 30 VU үед p95=115.55 ms, throughput=146.7947 req/s, error rate=0.00% гарсан. Node серверийн 100ms delay тогтмол байснаар тогтвортой хариу гарсан.
+PASS run-д 30 VU үед p95=116.13 ms, throughput=145.203343 req/s, error rate=0.00% гарсан. Node серверийн 100ms delay тогтмол байснаар тогтвортой хариу гарсан.
 
-FAIL run-д мөн p95=115.15 ms, throughput=146.777625 req/s, error rate=0.00% гарсан ч `p(95)<50` threshold-аас давуулсан учраас quality gate FAIL болсон. Энэ нь функциональ тест pass байх ч performance SLO унаж болохыг харуулна.
+FAIL run-д p95=115.32 ms, throughput=146.195226 req/s, error rate=0.00% гарсан ч `p(95)<50` threshold-аас давуулсан учраас quality gate FAIL болсон. Энэ нь функциональ тест pass байх ч performance SLO унаж болохыг харуулна.
 
 ---
 
 ## Дүгнэлт
 
-Нийт дүгнэлтээр 5 VU-тэй 30 VU-ийг харьцуулбал p95 246.34 ms-аас 252.33 ms болж 6 ms өссөн. 30 VU-аас 100 VU хүртэл p95 251.83 ms болж тогтвортой байж, энэ гадаад сайтод тодорхой saturation цэг харагдаагүй. Throughput 7.459878 req/s-аас 146.213849 req/s болж өссөнөөр VU-н өсөлт parallel request багтаамжаа өргөжүүлсэн. Нэгж хэрэглэгчийн хариу муудах цэгийг гадаад сайтод тодорхойлохын оронд локал controlled endpoint илүү тод харагдсан: 100ms delay p95-г 115ms орчимд тогтворжуулсан. Лекцийн latency ба throughput-г хамт хэмжих шаардлагатай гэсэн ойлголт батлагдсан. Error rate бүх external түвшин дээр 0.00% байсан тул availability сайн боловч энэ нь latency-н асуудлыг далдлуулж чадахааргүй. Локал PASS threshold-ийн p95 115.55ms нь baseline ба бодит endpoint delay дээр үндэслэгдсэн учраас хэрэгтэй quality gate болсон. `<50ms` threshold нь серверийн бодит p95-ээс доогуур учраас санаатайгаар FAIL гарсан. Stages run-ийн нэгтгэсэн p95 254.41ms нь халаалт, оргил, буултын хариуг нэг дор үзүүлж, түвшин тус бүрийн 246–252ms-н мэдээллийг орлохгүй. Нийтдээ local server дээр p95, throughput, error rate-г хамт авч үзэх capacity planning илүү үнэн зөв юм.
+Нийт дүгнэлтээр локал `/slow` endpoint-ийн 5 VU/30с baseline p95=116.42 ms гарсан. Ижил endpoint дээрх PASS run p95=116.13 ms болж 300 ms SLO-г давсан. FAIL run p95=115.32 ms, 50 ms threshold-аас өндөр учраас quality gate унав. Гадаад `test.k6.io`-ийн 5/30/100 VU p95 246.34/252.33/251.83 ms гарч, throughput 7.459878-аас 146.213849 req/s хүртэл өссөн ч энэ нь локал baseline/SLO-г тогтоох түүвэр биш. Stages run-ийн нэгтгэсэн p95 254.41 ms нь гадаад сайтын ерөнхий хариуг харуулахад ашиглана, харин эцсийн PASS/FAIL-г локал endpoint дээр шалгасан. Лекцийн latency ба throughput-г хамт хэмжих шаардлагатай гэсэн ойлголт батлагдсан. Error rate 0.00% байсан тул availability сайн боловч latency-н асуудлыг далдлуулж болно. Нийтдээ local server дээр p95, throughput, error rate-г хамт авч үзэх capacity planning илүү үнэн зөв юм.
 
 ---
 
 ## Нэмэлт: AI дүгнэлт
 
-AI-д k6 load test скрипт үүсгэхийг асуухад төслийн гол бүтэц болох `options`, `http.get`, `check`, `sleep`, threshold болон stages хэсгийг хурдан бэлдсэн давуу талтай. Гэхдээ AI ихэвчлэн санамсаргүй target URL эсвэл үндэслэлгүй threshold утга санал болгох аюултай. Энэ лабораторид AI-ийн саналыг шууд ашиглаагүй; зөвхөн test.k6.io болон локал 127.0.0.1 endpoint-ээр хязгаарласан. Threshold утгыг дагаж шууд хуулалгүй өөрийн 5 VU p95=246.34ms болон локал p95=115.55ms дээр үндэслэн PASS/FAIL-ийг өөрчилсөн. AI-ийн stages нь дөрвөн stage-аар ачааллыг өргөжүүлэх зориулалттай байсан боловч 5/30/100 VU-г тусад нь run хийх шаардлагатайг README-д ажиглав. AI-ийн скриптэд functional check болон threshold нь хоёр ялгаатай quality gate болохыг тусад нь тайлбарласан. Тиймээс AI нь эхний төсөл/санаа хурдан гаргаж өгөхөд тохиромжтой боловч target URL, SLO утга, ёс зүйн хязгаар болон CI exit code-г хүн шалгах ёстой.
+AI-д k6 load test скрипт үүсгэхийг асуухад төслийн гол бүтэц болох `options`, `http.get`, `check`, `sleep`, threshold болон stages хэсгийг хурдан бэлдсэн давуу талтай. Гэхдээ AI ихэвчлэн санамсаргүй target URL эсвэл үндэслэлгүй threshold утга санал болгох аюултай. Энэ лабораторид AI-ийн саналыг шууд ашиглаагүй; зөвхөн test.k6.io болон локал 127.0.0.1 endpoint-ээр хязгаарласан. Threshold утгыг дагаж шууд хуулалгүй `/slow` endpoint-ийн өөрийн 5 VU/30с baseline p95=116.42ms-д үндэслэн 300ms PASS threshold, 50ms FAIL threshold-ийг сонгосон. AI-ийн stages нь дөрвөн stage-аар ачааллыг өргөжүүлэх зориулалттай байсан боловч 5/30/100 VU-г тусад нь run хийх шаардлагатайг README-д тусгасан. AI-ийн скриптэд functional check болон threshold нь хоёр ялгаатай quality gate болохыг тусад нь тайлбарласан. Тиймээс AI нь эхний төсөл/санаа хурдан гаргаж өгөхөд тохиромжтой боловч target URL, SLO утга, ёс зүйн хязгаар болон CI exit code-г хүн шалгах ёстой.
