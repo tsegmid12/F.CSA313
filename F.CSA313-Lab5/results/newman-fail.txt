@@ -1,0 +1,129 @@
+newman
+
+Lab05 - Course Registration
+
+□ TC1 - Happy Path
+└ Setup Student
+  PUT http://localhost:3000/students/B231234567 [200 OK, 178B, 17ms]
+
+└ Setup Course
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
+
+└ Register
+  POST http://localhost:3000/registrations [201 Created, 202B, 2ms]
+  1. Status is 201
+  √  Result is OK
+  √  RegistrationID is a number
+
+□ TC2 - No Student
+└ Setup Course
+  PUT http://localhost:3000/courses/CS101 [200 OK, 178B, 1ms]
+
+└ Register
+  POST http://localhost:3000/registrations [200 OK, 192B, 2ms]
+  √  Status is 200
+  √  Result is ERROR_NO_STUDENT
+
+□ TC3 - Inactive Student
+└ Setup Student
+  PUT http://localhost:3000/students/S2 [200 OK, 178B, 1ms]
+
+└ Setup Course
+  PUT http://localhost:3000/courses/CS101 [200 OK, 178B, 2ms]
+
+└ Register
+  POST http://localhost:3000/registrations [200 OK, 198B, 2ms]
+  √  Status is 200
+  √  Result is ERROR_INACTIVE_STUDENT
+
+□ TC4 - No Course
+└ Setup Student
+  PUT http://localhost:3000/students/S3 [200 OK, 178B, 2ms]
+
+└ Register
+  POST http://localhost:3000/registrations [200 OK, 191B, 1ms]
+  √  Status is 200
+  √  Result is ERROR_NO_COURSE
+
+□ TC5 - Missing Prereqs
+└ Setup Student
+  PUT http://localhost:3000/students/S4 [200 OK, 178B, 1ms]
+
+└ Setup Course
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 1ms]
+
+└ Register
+  POST http://localhost:3000/registrations [200 OK, 215B, 1ms]
+  √  Status is 200
+  √  Result is ERROR_PREREQUISITES
+
+□ TC6 - Bad Request
+└ Register
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 2ms]
+  √  Status is 400
+  √  Result is ERROR_BAD_REQUEST
+
+□ TC7 - No Prereqs Req
+└ Setup Student
+  PUT http://localhost:3000/students/S5 [200 OK, 178B, 1ms]
+
+└ Setup Course
+  PUT http://localhost:3000/courses/CS101 [200 OK, 178B, 1ms]
+
+└ Register
+  POST http://localhost:3000/registrations [201 Created, 202B, 1ms]
+  √  Status is 201
+  √  Result is OK
+
+□ TC8 - Empty Courses
+└ Setup Student
+  PUT http://localhost:3000/students/S6 [200 OK, 178B, 1ms]
+
+└ Setup Course
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 2ms]
+
+└ Register
+  POST http://localhost:3000/registrations [200 OK, 215B, 1ms]
+  √  Status is 200
+  √  Result is ERROR_PREREQUISITES
+
+□ TC9 - Bad JSON
+└ Register
+  POST http://localhost:3000/registrations [400 Bad Request, 199B, 1ms]
+  √  Status is 400
+  √  Result is ERROR_BAD_JSON
+
+□ TC10 - JSONPlaceholder Users
+└ GET Users
+  GET https://jsonplaceholder.typicode.com/users [200 OK, 6.61kB, 32ms]
+  √  Status is 200
+  √  Response is an array
+  √  First user name is correct
+
+┌─────────────────────────┬─────────────────┬─────────────────┐
+│                         │        executed │          failed │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              iterations │               1 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│                requests │              22 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│            test-scripts │              10 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│      prerequest-scripts │               0 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              assertions │              22 │               1 │
+├─────────────────────────┴─────────────────┴─────────────────┤
+│ total run duration: 2s                                      │
+├─────────────────────────────────────────────────────────────┤
+│ total data received: 6.15kB (approx)                        │
+├─────────────────────────────────────────────────────────────┤
+│ average response time: 3ms [min: 1ms, max: 32ms, s.d.: 7ms] │
+└─────────────────────────────────────────────────────────────┘
+
+[31m  # [39m[31m failure        [39m[31m detail                                                [39m
+[90m    [39m[90m                [39m[90m                                                       [39m
+ 1.  AssertionError  Status is 201                                         
+                     expected response to have status code 200 but got 201 
+                     at assertion:0 in test-script                         
+                     inside "TC1 - Happy Path / Register"                  
+exit=1
