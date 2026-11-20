@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Lab 10 M3 unused assignment">
+  <description>Detect unused local assignments introduced by the M3 dead-definition mutation.</description>
+  <rule ref="category/java/bestpractices.xml/UnusedAssignment">
+    <properties>
+      <property name="reportUnusedVariables" value="true"/>
+    </properties>
+  </rule>
+</ruleset>
