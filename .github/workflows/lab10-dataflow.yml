@@ -63,7 +63,7 @@ jobs:
           p=Path("src/main/java/mn/edu/must/sqat/DataFlowTargets.java")
           p.write_text(p.read_text().replace("best = streak;", "best = present;"))
           PY
-          mvn -B -Dtest=BonusTest#DU_* test > results/mvn-test-M2.txt 2>&1
+          mvn -B '-Dtest=BonusTest#DU_*' test > results/mvn-test-M2.txt 2>&1
           M2=$?
           echo "$M2" > results/mutant-M2-exit.txt
           mvn -B -Dtest=BonusTest#M2Kill_bestUpdateUsesStreak test > results/mvn-test-M2-kill.txt 2>&1
@@ -79,11 +79,30 @@ jobs:
           mvn -B -Dtest=BonusTest test > results/mvn-test-M3.txt 2>&1
           M3=$?
           echo "$M3" > results/mutant-M3-exit.txt
+          mvn -B pmd:pmd > results/pmd-M3.txt 2>&1
+          PMD=$?
+          echo "$PMD" > results/pmd-M3-exit.txt
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          report=Path("target/pmd.xml")
+          if not report.exists():
+              raise SystemExit("PMD report was not generated")
+          root=ET.parse(report).getroot()
+          matches=[]
+          for violation in root.findall(".//violation"):
+              if violation.attrib.get("rule") == "UnusedLocalVariable":
+                  matches.append((violation.attrib.get("beginline"), (violation.text or "").strip()))
+          if not matches:
+              raise SystemExit("PMD did not report the unused M3 local variable")
+          print("PMD detected unused local:", matches)
+          PY
+          PMD_CHECK=$?
           cp /tmp/DataFlowTargets.java "$SRC"
 
           # Expected: M1 killed, M2 survives DU suite, M2 kill test kills it,
           # M3 survives runtime tests because its new definition is unused.
-          test "$M1" -ne 0 && test "$M2" -eq 0 && test "$M2K" -ne 0 && test "$M3" -eq 0
+          test "$M1" -ne 0 && test "$M2" -eq 0 && test "$M2K" -ne 0 && test "$M3" -eq 0 && test "$PMD" -eq 0 && test "$PMD_CHECK" -eq 0
       - name: Commit fresh Maven and JaCoCo evidence
         if: success()
         working-directory: .
