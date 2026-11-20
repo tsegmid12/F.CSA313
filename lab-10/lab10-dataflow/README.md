@@ -56,7 +56,7 @@ Bonus функцийн бүх хувьсагчийн definition, c-use, p-use, k
 
 | Тест | Оролт | Хүлээгдэж буй үр дүн | Гол хамрах definition |
 |---|---|---:|---|
-| T1 | `[1,0,1,1,1,1,1]`, threshold `5` | 8 | initial/loop-carried present, streak, reset/recovery, best, score@51, score@54 |
+| T1 | `[1,0,1,1,1,1,1]`, threshold `5` | 8 | attendance/threshold parameters, present, streak, reset/recovery, best, foreach element, score@51, score@54 |
 | T2 | `[1,1,1,1,1]`, threshold `6` | 3 | score@49 survives to use@54; score@54 reaches return |
 
 Хоёр тест шаардлагатай шалтгаан нь `score@49`-ийн definition дараагийн use-д хүрэхийн тулд `present >= threshold` нөхцөл худал байх ёстой, харин `score@51` үүсэхийн тулд уг нөхцөл үнэн байх ёстой. Эдгээр зам нэг execution-д зэрэг биелэх боломжгүй. T1 нь streak reset-ийн дараа дараагийн эерэг өдөр `streak@46 -> use@41` хосыг мөн хамарна.
