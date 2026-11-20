@@ -92,13 +92,13 @@ public class BonusTest {
     }
 
     @Test
-    @DisplayName("DUPairs-T8: streak reset then no more elements: streak(46->42) [pair: streak def@46->use@42]")
-    void DU_streak_def46_use42_afterReset() {
+    @DisplayName("DUPairs-T8: streak reset value is read by next increment [pair: streak def@46->use@41]")
+    void DU_streak_def46_use41_afterReset() {
         // attendance=[1,0,1], threshold=10
         // iter1: a=1>0 => present=1,streak=1,best=1(1>0)
         // iter2: a=0 => streak=0 (def@46)
         // iter3: a=1>0 => present=2,streak=1, 1>1? no => best=1
-        // Covers: streak def@46 -> use@42 p-use (after reset, streak compared to best)
+        // Covers: streak def@46 -> use@41 c-use (reset value read by next streak increment)
         assertEquals(0, DataFlowTargets.bonus(new int[]{1, 0, 1}, 10));
     }
 
