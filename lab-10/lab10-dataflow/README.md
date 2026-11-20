@@ -98,7 +98,7 @@ Final suite-ийн branch coverage **16/16 = 100%**. Line coverage нь **23/24*
 1. all-defs-ийн 2 тестийг тусад нь ажиллуулж `mvn-verify-alldefs.txt`, `jacoco-alldefs.csv` үүсгэнэ;
 2. GCD болон Bonus-ийн DU тестүүдийг тусад нь ажиллуулж `mvn-verify-allpairs.txt`, `jacoco-allpairs.csv` үүсгэнэ;
 3. бүх тестийг `mvn clean verify`-ээр ажиллуулж `mvn-verify-final.txt`, `jacoco-final.csv` үүсгэнэ;
-4. M1/M2/M3 mutation туршилтыг ажиллуулж тус бүрийн log, exit code хадгална; M3-ийн unused local definition-ийг PMD `UnusedLocalVariable` дүрмээр шалгана;
+4. M1/M2/M3 mutation туршилтыг ажиллуулж тус бүрийн log, exit code хадгална; M3-ийн unused local definition-ийг PMD `UnusedAssignment` дүрмээр шалгана;
 5. шинээр үүсгэсэн нотолгоог repository-ийн `results/` хавтаст commit хийнэ.
 
 Final coverage тайланг JaCoCo CSV-ийн `BRANCH_MISSED`, `BRANCH_COVERED`, `LINE_MISSED`, `LINE_COVERED` баганаас уншина. Зорилтот үр дүн нь бүх branch хамрагдсан байх; далд default constructor-оос үүдэх ганц missed line зөвшөөрөгдөнө. Coverage тоог гараар таамаглан бичихгүй, зөвхөн шинээр ажилласан `results/jacoco-*.csv`-ээс авна.
