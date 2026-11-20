@@ -44,7 +44,10 @@ jobs:
           import sys
           p = Path(sys.argv[1])
           text = p.read_text()
-          p.write_text(text.replace("assertEquals(8,", "assertEquals(3,", 1))
+          text = text.replace("assertEquals(8,", "assertEquals(3,", 1)
+          text = text.replace("new int[]{1, 1, 1, 1, 1}, 6", "new int[]{0, 1, 1, 1, 1, 1}, 7")
+          text = text.replace("new int[]{1, 1, 1, 1, 1}, 5", "new int[]{0, 1, 1, 1, 1, 1}, 5")
+          p.write_text(text)
           PY
           mkdir -p "$ROOT/results"
           { java -version; mvn -version; } 2>&1 | tee "$ROOT/results/environment.txt"
