@@ -5,7 +5,7 @@ digraph BonusCFG {
   entry [shape=oval, label="Entry", fillcolor="#dcfce7"];
   guard [label="31–32: attendance == null OR threshold < 0 ?"];
   error [label="32: throw IllegalArgumentException", fillcolor="#fee2e2"];
-  init [label="34–36: present=0; streak=0; best=0"];
+  init [label="35–37: present=0; streak=0; best=0"];
   loop [shape=diamond, label="38: next attendance element?\nattendance p-use"];
   assign [label="38: a = next element\na def"];
   pos [shape=diamond, label="39: a > 0 ?\na p-use"];
