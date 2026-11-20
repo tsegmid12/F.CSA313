@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class BonusTest {
 
     // Stage 1: the minimum all-defs set. The two cases are necessary because
-    // score=0 (line 50) and score=5 (line 52) are distinct definitions.
+    // score=0 (line 49) and score=5 (line 51) are distinct definitions.
     @Test
     @DisplayName("ALL_DEFS_score_initial_definition_reaches_bonus_addition")
     void allDefs_initialScoreDefinitionReachesBonusAddition() {
