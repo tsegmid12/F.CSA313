@@ -80,15 +80,15 @@ The CFG is intended to show the validation guard, the enhanced-for iteration (th
 | threshold | parameter | 50 | p | Valid input reaches the score threshold decision | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
 | a | 38 | 39 | p | Each fetched element is tested before next assignment | allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
 | present | 35 | 40 | c | First present day increments initial count | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
-| present | 34 | 50 | p | No present day has redefined present | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
+| present | 35 | 50 | p | No present day has redefined present | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
 | present | 40 | 40 | c | A later present day increments the previous count | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
 | present | 40 | 50 | p | Last count definition reaches threshold decision | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
 | streak | 36 | 41 | c | First element is present | longStreakCoversBestUpdateAndAdditionalScore |
 | streak | 41 | 41 | c | Consecutive present days carry the previous streak | longStreakCoversBestUpdateAndAdditionalScore |
 | streak | 41 | 42 | p | Updated streak is compared with best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
-| streak | 46 | 41 | c | A present day follows an absent day; reset value is incremented | mixedAttendanceCoversStreakKillAndRestart |
+| streak | 46 | 41 | c | A present day follows an absent day; reset value is incremented | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart |
 | best | 37 | 42 | p | First present day compares streak with initial best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
-| best | 36 | 53 | p | No positive attendance ever redefines best | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
+| best | 37 | 53 | p | No positive attendance ever redefines best | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
 | best | 43 | 42 | p | A later positive day compares with the previous best | longStreakCoversBestUpdateAndAdditionalScore / mixedAttendanceCoversStreakKillAndRestart |
 | best | 43 | 53 | p | Final best reaches the bonus decision without another best update | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
 | score | 49 | 54 | c | Threshold is false and the streak condition is true | allDefs_initialScoreDefinitionReachesBonusAddition |
