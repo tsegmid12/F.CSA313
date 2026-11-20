@@ -1,15 +1,3 @@
-WARNING: A restricted method in java.lang.System has been called
-WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/opt/homebrew/Cellar/maven/3.9.9/libexec/lib/jansi-2.4.1.jar)
-WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
-WARNING: Restricted methods will be blocked in a future release unless native access is enabled
-
-WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
-WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/opt/homebrew/Cellar/maven/3.9.9/libexec/lib/guava-33.2.1-jre.jar)
-WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
-WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
-WARNING: Final field _cipher in class org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher has been mutated reflectively by class org.eclipse.sisu.bean.BeanPropertyField in unnamed module @143640d5 (file:/opt/homebrew/Cellar/maven/3.9.9/libexec/lib/org.eclipse.sisu.inject-0.9.0.M3.jar)
-WARNING: Use --enable-final-field-mutation=ALL-UNNAMED to avoid a warning
-WARNING: Mutating final fields will be blocked in a future release unless final field mutation is enabled
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------< mn.edu.must.sqat:lab10-dataflow >-------------------
@@ -17,21 +5,18 @@ WARNING: Mutating final fields will be blocked in a future release unless final 
 [INFO]   from pom.xml
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
-[INFO] --- clean:3.2.0:clean (default-clean) @ lab10-dataflow ---
-[INFO] Deleting /Users/justturuu/Downloads/lab10-dataflow/target
-[INFO] 
 [INFO] --- jacoco:0.8.12:prepare-agent (default) @ lab10-dataflow ---
-[INFO] argLine set to -javaagent:/Users/justturuu/.m2/repository/org/jacoco/org.jacoco.agent/0.8.12/org.jacoco.agent-0.8.12-runtime.jar=destfile=/Users/justturuu/Downloads/lab10-dataflow/target/jacoco.exec
+[INFO] argLine set to "-javaagent:/home/tsogto/.m2/repository/org/jacoco/org.jacoco.agent/0.8.12/org.jacoco.agent-0.8.12-runtime.jar=destfile=/home/tsogto/Documents/gobi bagsh/lab10-dataflow/f.csa313-lab10/target/jacoco.exec"
 [INFO] 
 [INFO] --- resources:3.3.1:resources (default-resources) @ lab10-dataflow ---
-[INFO] skip non existing resourceDirectory /Users/justturuu/Downloads/lab10-dataflow/src/main/resources
+[INFO] skip non existing resourceDirectory /home/tsogto/Documents/gobi bagsh/lab10-dataflow/f.csa313-lab10/src/main/resources
 [INFO] 
 [INFO] --- compiler:3.13.0:compile (default-compile) @ lab10-dataflow ---
 [INFO] Recompiling the module because of changed source code.
 [INFO] Compiling 1 source file with javac [debug release 17] to target/classes
 [INFO] 
 [INFO] --- resources:3.3.1:testResources (default-testResources) @ lab10-dataflow ---
-[INFO] skip non existing resourceDirectory /Users/justturuu/Downloads/lab10-dataflow/src/test/resources
+[INFO] skip non existing resourceDirectory /home/tsogto/Documents/gobi bagsh/lab10-dataflow/f.csa313-lab10/src/test/resources
 [INFO] 
 [INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ lab10-dataflow ---
 [INFO] Recompiling the module because of changed dependency.
@@ -44,10 +29,10 @@ WARNING: Mutating final fields will be blocked in a future release unless final 
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
 [INFO] Running mn.edu.must.sqat.GcdTest
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 s -- in mn.edu.must.sqat.GcdTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.077 s -- in mn.edu.must.sqat.GcdTest
 [INFO] Running mn.edu.must.sqat.BonusTest
-[ERROR] Tests run: 7, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.011 s <<< FAILURE! -- in mn.edu.must.sqat.BonusTest
-[ERROR] mn.edu.must.sqat.BonusTest.b07_belowThresholdLongStreak -- Time elapsed: 0.003 s <<< FAILURE!
+[ERROR] Tests run: 8, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.071 s <<< FAILURE! -- in mn.edu.must.sqat.BonusTest
+[ERROR] mn.edu.must.sqat.BonusTest.thresholdNotReachedWithLongStreak -- Time elapsed: 0.014 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: <3> but was: <0>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -55,12 +40,12 @@ org.opentest4j.AssertionFailedError: expected: <3> but was: <0>
 	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
 	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
 	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:531)
-	at mn.edu.must.sqat.BonusTest.b07_belowThresholdLongStreak(BonusTest.java:60)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:583)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at mn.edu.must.sqat.BonusTest.thresholdNotReachedWithLongStreak(BonusTest.java:16)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-[ERROR] mn.edu.must.sqat.BonusTest.b01_longStreakWithBreak_thr3 -- Time elapsed: 0.001 s <<< FAILURE!
+[ERROR] mn.edu.must.sqat.BonusTest.thresholdReachedWithLongStreak -- Time elapsed: 0.004 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: expected: <8> but was: <5>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
@@ -68,29 +53,29 @@ org.opentest4j.AssertionFailedError: expected: <8> but was: <5>
 	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
 	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
 	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:531)
-	at mn.edu.must.sqat.BonusTest.b01_longStreakWithBreak_thr3(BonusTest.java:21)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:583)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+	at mn.edu.must.sqat.BonusTest.thresholdReachedWithLongStreak(BonusTest.java:24)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
 [INFO] 
 [INFO] Results:
 [INFO] 
 [ERROR] Failures: 
-[ERROR]   BonusTest.b01_longStreakWithBreak_thr3:21 expected: <8> but was: <5>
-[ERROR]   BonusTest.b07_belowThresholdLongStreak:60 expected: <3> but was: <0>
+[ERROR]   BonusTest.thresholdNotReachedWithLongStreak:16 expected: <3> but was: <0>
+[ERROR]   BonusTest.thresholdReachedWithLongStreak:24 expected: <8> but was: <5>
 [INFO] 
 [ERROR] Tests run: 10, Failures: 2, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  1.110 s
-[INFO] Finished at: 2026-11-16T16:23:20+08:00
+[INFO] Total time:  2.824 s
+[INFO] Finished at: 2026-11-17T12:50:21+08:00
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.2.5:test (default-test) on project lab10-dataflow: There are test failures.
 [ERROR] 
-[ERROR] Please refer to /Users/justturuu/Downloads/lab10-dataflow/target/surefire-reports for the individual test results.
+[ERROR] Please refer to /home/tsogto/Documents/gobi bagsh/lab10-dataflow/f.csa313-lab10/target/surefire-reports for the individual test results.
 [ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
 [ERROR] -> [Help 1]
 [ERROR] 
