@@ -87,6 +87,7 @@ jobs:
           (cd "$ROOT" && mvn verify) 2>&1 | tee "$ROOT/results/mvn-verify-final.txt"
           cp "$ROOT/target/site/jacoco/jacoco.csv" "$ROOT/results/jacoco-final.csv"
           git diff --exit-code -- "$ROOT/src/main/java/mn/edu/must/sqat/DataFlowTargets.java"
+          git diff --exit-code 0eee82b33ac6894679966879f2b88c119b704db6 HEAD -- "$ROOT/src/main/java/mn/edu/must/sqat/DataFlowTargets.java"
 
       - name: Commit generated evidence
         shell: bash
