@@ -5,34 +5,21 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Lab 10 - Section B4: bonus() all-defs then all-DU-pairs tests.
+ * Lab 10 - Section B4: bonus() data-flow tests.
  *
- * bonus() variables and their defs (DataFlowTargets.java line numbers):
- *   attendance: def@31 (param), use@32(p), use@38(p)
- *   threshold:  def@31 (param), use@32(p), use@50(p)
- *   present:    def@35 (init=0), def@40 (present+1), use@40(c), use@50(p)
- *   streak:     def@36 (init=0), def@41 (streak+1), def@46 (reset), use@41(c), use@42(p)
- *   best:       def@37 (init=0), def@43 (best=streak), use@42(p), use@53(p)
- *   a:          def@38 (for-each assigns a), use@39(p)
- *   score:      def@49 (init=0), def@51 (score=5), def@54 (score=score+3), use@54(c), use@56(c)
+ * Minimum all-defs suite: allDefs_T1 and allDefs_T2.
+ * The remaining DU_* tests exercise reachable definition-use pairs and
+ * predicate outcomes. M2Kill_bestUpdateUsesStreak is a separate mutation-kill
+ * regression test, not part of the DU-pairs minimum.
  *
- * ALL-DEFS: must reach a use from every def node.
- *   present def@35 -> use@40 (or use@50)   -- need any test where loop runs OR present>=threshold
- *   present def@40 -> use@50               -- need present to be incremented and reach line 50
- *   streak  def@36 -> use@41 (or use@42)   -- any test entering loop with a>0
- *   streak  def@41 -> use@42               -- test where a>0 so streak incremented
- *   streak  def@46 -> use@42 or use@41     -- test with a<=0 after a>0 (streak reset, then a>0 again)
- *   best    def@37 -> use@42               -- test where loop runs (best initially 0, check streak>best)
- *   best    def@43 -> use@53               -- test where streak>best happened (best updated, then checked @53)
- *   a       def@38 -> use@39               -- any non-empty attendance array
- *   score   def@49 -> use@56 (via 51 or 54) -- any test
- *   score   def@51 -> use@54 or use@56     -- present>=threshold
- *   score   def@54 -> use@56              -- best>=5 path
- *
- * Minimum all-defs: 3 tests cover all defs.
- *   T1: covers streak def@46 (must have a<=0 entry), and also streak def@36->use@41 if followed by a>0
- *   T2: covers best def@43 (need streak>best), score def@54 (need best>=5)
- *   T3: covers score def@51 (present>=threshold) without best>=5
+ * Source line references:
+ * attendance@31 -> predicates@32 and loop@38
+ * threshold@31  -> predicates@32 and @50
+ * present@35/@40 -> uses@40 and predicate@50
+ * streak@36/@41/@46 -> uses@41 and predicate@42
+ * best@37/@43 -> predicates@42 and @53
+ * a@38 -> predicate@39
+ * score@49/@51/@54 -> uses@54 and @56
  */
 public class BonusTest {
 
