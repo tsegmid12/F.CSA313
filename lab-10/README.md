@@ -74,26 +74,29 @@ line numbers; edge labels identify the corresponding test or loop condition.
 The following table groups identical loop-carried pairs; `T/F` means that
 both feasible predicate outcomes are covered.
 
-| Variable | Definition | Uses reached by a def-clear path | Test IDs |
-|---|---:|---|---|
-| attendance | parameter | 32 p-use; 38 loop p-use | `invalidInputs`, `emptyAttendance` |
-| threshold | parameter | 32 p-use; 51 p-use | `invalidInputs`, `thresholdFalseAndLongStreakUseScore` |
-| present | 35 | 41 c-use; 51 p-use | `onePresentDay`, `thresholdFalseAndLongStreakUseScore` |
-| present | 41 | later 41 c-use; 51 p-use | `fivePresentDays`, `brokenStreak`, `thresholdFalseAndLongStreakUseScore` |
-| streak | 36 | 42 c-use; 43/44 p-use | `onePresentDay` |
-| streak | 42 | 42 c-use; 43/44 p-use | `fivePresentDays`, `brokenStreak` |
-| streak | 46 | 42 c-use; 43/44 p-use | `brokenStreak` |
-| best | 37 | 44 p-use/c-use; 54 p-use | `onePresentDay`, `fivePresentDays` |
-| best | 44 | later 44 p-use/c-use; 54 p-use | `fivePresentDays`, `brokenStreak` |
-| score | 49 | 56 c-use, or 55 c-use when the best branch is true | `emptyAttendance`, `thresholdFalseAndLongStreakUseScore` |
-| score | 52 | 55 c-use or 56 c-use | `fivePresentDays`, `thresholdFalseAndLongStreakUseScore` |
-| a | 38 | 39 p-use | every non-empty attendance test |
+| Variable | Definition | Uses reached by a def-clear path | Killed definitions on paths | Test IDs |
+|---|---:|---|---|---|
+| attendance | parameter | 32 p-use; 38 loop p-use | none | `invalidInputs`, `emptyAttendance` |
+| threshold | parameter | 32 p-use; 51 p-use | none | `invalidInputs`, `thresholdFalseAndLongStreakUseScore` |
+| present | 35 | 41 c-use; 51 p-use | killed by line 41 before a later present update | `onePresentDay`, `thresholdFalseAndLongStreakUseScore` |
+| present | 41 | later 41 c-use; 51 p-use | each line 41 definition kills the preceding `present` definition | `fivePresentDays`, `brokenStreak`, `thresholdFalseAndLongStreakUseScore` |
+| streak | 36 | 42 c-use; 43/44 p-use | killed by line 46 on the first missed day | `onePresentDay` |
+| streak | 42 | 42 c-use; 43/44 p-use | killed by line 46 before a later streak use on a missed day | `fivePresentDays`, `brokenStreak` |
+| streak | 46 | 42 c-use; 43/44 p-use | killed by the next line 42 or line 46 definition | `brokenStreak` |
+| best | 37 | 44 p-use/c-use; 54 p-use | killed by line 44 only when `streak > best` is true | `onePresentDay`, `fivePresentDays` |
+| best | 44 | later 44 p-use/c-use; 54 p-use | killed by a later line 44 update | `fivePresentDays`, `brokenStreak` |
+| score | 49 | 56 c-use, or 55 c-use when the best branch is true | killed by line 52 when `present >= threshold` is true | `emptyAttendance`, `thresholdFalseAndLongStreakUseScore` |
+| score | 52 | 55 c-use or 56 c-use | killed by no later score definition before return | `fivePresentDays`, `thresholdFalseAndLongStreakUseScore` |
+| a | 38 | 39 p-use | killed by the next loop assignment to `a` | every non-empty attendance test |
 
-The `streak = 0` definition at line 46 kills an earlier streak definition
-before any later streak use on a missed day. Therefore an earlier `streak`
-definition followed by a missed-day line 46 is not a DU pair. The impossible
-predicate combinations are excluded when the source definition is already
-killed or when a loop has no next element.
+The table explicitly marks the kill at every redefinition. The `streak = 0`
+definition at line 46 kills an earlier streak definition before any later
+streak use on a missed day. Therefore an earlier `streak` definition followed
+by a missed-day line 46 is not a DU pair. Similarly, line 52 kills the line
+49 `score` definition on the threshold-true path, and each line 41 or 44
+redefinition kills the preceding `present` or `best` definition. The
+impossible predicate combinations are excluded when the source definition is
+already killed or when a loop has no next element.
 
 The minimum all-defs set is four tests in the recorded run: two gcd tests and
 two bonus tests. For `bonus`, `emptyAttendance` reaches the initial
