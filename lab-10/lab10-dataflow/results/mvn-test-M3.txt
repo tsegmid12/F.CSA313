@@ -28,10 +28,10 @@
 [INFO] -------------------------------------------------------
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
-[INFO] Running mn.edu.must.sqat.BonusTest
-[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.079 s -- in mn.edu.must.sqat.BonusTest
 [INFO] Running mn.edu.must.sqat.GcdTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in mn.edu.must.sqat.GcdTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.046 s -- in mn.edu.must.sqat.GcdTest
+[INFO] Running mn.edu.must.sqat.BonusTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.030 s -- in mn.edu.must.sqat.BonusTest
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -40,8 +40,8 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  2.052 s
-[INFO] Finished at: 2026-11-20T05:07:29Z
+[INFO] Total time:  1.617 s
+[INFO] Finished at: 2026-11-20T05:08:20Z
 [INFO] ------------------------------------------------------------------------
 
 Maven exit status: 0
