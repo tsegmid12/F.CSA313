@@ -38,7 +38,7 @@ jobs:
           ROOT="lab-10/lab10-dataflow"
           TEST="$ROOT/src/test/java/mn/edu/must/sqat/BonusTest.java"
           cp "$TEST" /tmp/BonusTest-final.java
-          git show 5ff511bc782822a3b01d11882293eb41ace79d32:"$TEST" > "$TEST"
+          git show b0b17dbd26143dd2830ed336f321e7cd58135691:"$TEST" > "$TEST"
           mkdir -p "$ROOT/results"
           { java -version; mvn -version; } 2>&1 | tee "$ROOT/results/environment.txt"
           (cd "$ROOT" && mvn verify) 2>&1 | tee "$ROOT/results/mvn-verify-alldefs.txt"
@@ -53,17 +53,24 @@ jobs:
           SOURCE="$ROOT/src/main/java/mn/edu/must/sqat/DataFlowTargets.java"
           cp "$SOURCE" /tmp/DataFlowTargets-original.java
 
+          run_mutation() {
+            name="$1"
+            set +e
+            (cd "$ROOT" && mvn test) 2>&1 | tee "$ROOT/results/mvn-test-$name.txt"
+            status=${PIPESTATUS[0]}
+            set -e
+            cp /tmp/DataFlowTargets-original.java "$SOURCE"
+            printf "\\nMaven exit status: %s\\n" "$status" >> "$ROOT/results/mvn-test-$name.txt"
+          }
+
           sed -i '/streak = streak + 1;/d' "$SOURCE"
-          (cd "$ROOT" && mvn test) 2>&1 | tee "$ROOT/results/mvn-test-M1.txt"
-          cp /tmp/DataFlowTargets-original.java "$SOURCE"
+          run_mutation M1
 
           sed -i 's/best = streak;/best = present;/' "$SOURCE"
-          (cd "$ROOT" && mvn test) 2>&1 | tee "$ROOT/results/mvn-test-M2.txt"
-          cp /tmp/DataFlowTargets-original.java "$SOURCE"
+          run_mutation M2
 
-          sed -i '/        int score = 0;/i\        int total = present + best;' "$SOURCE"
-          (cd "$ROOT" && mvn test) 2>&1 | tee "$ROOT/results/mvn-test-M3.txt"
-          cp /tmp/DataFlowTargets-original.java "$SOURCE"
+          sed -i '/        int score = 0;/i\\        int total = present + best;' "$SOURCE"
+          run_mutation M3
 
       - name: Capture final verification
         shell: bash
