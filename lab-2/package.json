@@ -1,0 +1,7 @@
+{
+  "name": "f-csa313-lab2",
+  "private": true,
+  "scripts": {
+    "server": "node local-server.js"
+  }
+}
