@@ -35,7 +35,7 @@ Stages ажиллуулалтын бүтэн текст [results/stages.txt](./r
 
 ## Baseline ба SLO
 
-Анхдагч 5 VU test-ийн p95 = 246.34 ms байсан. Локал серверийн 100ms sleep endpoint-д үндэслэн локал pass SLO-оо p95 < 300ms болгож сонгосон. [PASS үр дүн](./results/threshold-pass.txt)-д p95 115.55ms байсан тул PASS; [FAIL үр дүн](./results/threshold-fail.txt)-д p95 115.15ms байсан тул p95 < 50ms хаалга cross болж, тест FAIL гарсан.
+Анхдагч 5 VU test-ийн p95 = 246.34 ms байсан. Үүнээс 300ms нь 53.66ms буюу ойролцоогоор 22%-ийн хамгаалалтын захиралтай margin өгдөг тул локал серверийн 100ms sleep endpoint-д зориулж PASS SLO-оо p95 < 300ms болгон сонгосон. [PASS үр дүн](./results/threshold-pass.txt)-д p95 115.55ms байсан тул PASS; [FAIL үр дүн](./results/threshold-fail.txt)-д p95 115.15ms байсан тул p95 < 50ms хаалга cross болж, тест FAIL гарсан.
 
 ## Дүгнэлт
 
