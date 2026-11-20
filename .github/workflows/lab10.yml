@@ -75,11 +75,19 @@ jobs:
             set -e
             if [ "$name" = "M3" ]; then
               set +e
-              (cd "$ROOT" && mvn org.apache.maven.plugins:maven-pmd-plugin:3.27.0:pmd -Dpmd.rulesets=category/java/bestpractices.xml/UnusedAssignment) 2>&1 | tee "$ROOT/results/static-analysis-M3.txt"
+              (cd "$ROOT" && mvn org.apache.maven.plugins:maven-pmd-plugin:3.27.0:pmd -Drulesets=.pmd/ruleset.xml) 2>&1 | tee "$ROOT/results/static-analysis-M3.txt"
               pmd_status=${PIPESTATUS[0]}
               set -e
               if [ -f "$ROOT/target/site/pmd.html" ]; then
                 cp "$ROOT/target/site/pmd.html" "$ROOT/results/static-analysis-M3.html"
+              fi
+              if [ -f "$ROOT/target/pmd.xml" ]; then
+                cp "$ROOT/target/pmd.xml" "$ROOT/results/static-analysis-M3.xml"
+                if grep -n -C 2 "UnusedAssignment" "$ROOT/target/pmd.xml" >> "$ROOT/results/static-analysis-M3.txt"; then
+                  :
+                else
+                  printf "\\nPMD report contains no UnusedAssignment violation.\\n" >> "$ROOT/results/static-analysis-M3.txt"
+                fi
               fi
               printf "\\nPMD exit status: %s\\n" "$pmd_status" >> "$ROOT/results/static-analysis-M3.txt"
             fi
