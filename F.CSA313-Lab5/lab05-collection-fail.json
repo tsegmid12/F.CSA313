@@ -16,12 +16,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS201\"]}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/students/B231234567",
-              "host": ["{{baseUrl}}"],
-              "path": ["students", "B231234567"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "B231234567"
+              ]
             }
           }
         },
@@ -33,12 +42,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"prerequisites\": [\"CS201\"]}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/courses/CS313",
-              "host": ["{{baseUrl}}"],
-              "path": ["courses", "CS313"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "CS313"
+              ]
             }
           }
         },
@@ -63,12 +81,20 @@
             "body": {
               "mode": "raw",
               "raw": "{\"studentID\": \"B231234567\", \"courseID\": \"CS313\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
@@ -86,12 +112,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"prerequisites\": []}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/courses/CS101",
-              "host": ["{{baseUrl}}"],
-              "path": ["courses", "CS101"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "CS101"
+              ]
             }
           }
         },
@@ -115,12 +150,20 @@
             "body": {
               "mode": "raw",
               "raw": "{\"studentID\": \"NONEXISTENT\", \"courseID\": \"CS101\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
@@ -138,12 +181,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"status\": \"inactive\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/students/S2",
-              "host": ["{{baseUrl}}"],
-              "path": ["students", "S2"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "S2"
+              ]
             }
           }
         },
@@ -155,12 +207,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"prerequisites\": []}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/courses/CS101",
-              "host": ["{{baseUrl}}"],
-              "path": ["courses", "CS101"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "CS101"
+              ]
             }
           }
         },
@@ -184,12 +245,20 @@
             "body": {
               "mode": "raw",
               "raw": "{\"studentID\": \"S2\", \"courseID\": \"CS101\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
@@ -207,12 +276,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"status\": \"active\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/students/S3",
-              "host": ["{{baseUrl}}"],
-              "path": ["students", "S3"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "S3"
+              ]
             }
           }
         },
@@ -236,12 +314,20 @@
             "body": {
               "mode": "raw",
               "raw": "{\"studentID\": \"S3\", \"courseID\": \"NONEXISTENT\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
@@ -259,12 +345,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"status\": \"active\", \"coursesTaken\": []}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/students/S4",
-              "host": ["{{baseUrl}}"],
-              "path": ["students", "S4"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "S4"
+              ]
             }
           }
         },
@@ -276,12 +371,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"prerequisites\": [\"CS201\"]}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/courses/CS313",
-              "host": ["{{baseUrl}}"],
-              "path": ["courses", "CS313"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "CS313"
+              ]
             }
           }
         },
@@ -305,12 +409,20 @@
             "body": {
               "mode": "raw",
               "raw": "{\"studentID\": \"S4\", \"courseID\": \"CS313\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
@@ -340,12 +452,20 @@
             "body": {
               "mode": "raw",
               "raw": "{\"studentID\": \"S1\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
@@ -363,12 +483,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"status\": \"active\", \"coursesTaken\": []}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/students/S5",
-              "host": ["{{baseUrl}}"],
-              "path": ["students", "S5"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "S5"
+              ]
             }
           }
         },
@@ -380,12 +509,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"prerequisites\": []}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/courses/CS101",
-              "host": ["{{baseUrl}}"],
-              "path": ["courses", "CS101"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "CS101"
+              ]
             }
           }
         },
@@ -409,12 +547,20 @@
             "body": {
               "mode": "raw",
               "raw": "{\"studentID\": \"S5\", \"courseID\": \"CS101\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
@@ -432,12 +578,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"status\": \"active\", \"coursesTaken\": []}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/students/S6",
-              "host": ["{{baseUrl}}"],
-              "path": ["students", "S6"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "S6"
+              ]
             }
           }
         },
@@ -449,12 +604,21 @@
             "body": {
               "mode": "raw",
               "raw": "{\"prerequisites\": [\"CS201\"]}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/courses/CS313",
-              "host": ["{{baseUrl}}"],
-              "path": ["courses", "CS313"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "CS313"
+              ]
             }
           }
         },
@@ -478,12 +642,20 @@
             "body": {
               "mode": "raw",
               "raw": "{\"studentID\": \"S6\", \"courseID\": \"CS313\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
@@ -513,19 +685,27 @@
             "body": {
               "mode": "raw",
               "raw": "{ \"studentID\": \"S1\", ",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/registrations",
-              "host": ["{{baseUrl}}"],
-              "path": ["registrations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registrations"
+              ]
             }
           }
         }
       ]
     },
     {
-      "name": "TC10 - JSONPlaceholder Users",
+      "name": "External - JSONPlaceholder Users",
       "folder": "External",
       "item": [
         {
@@ -537,7 +717,7 @@
                 "exec": [
                   "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
                   "pm.test(\"Response is an array\", function () { pm.expect(pm.response.json()).to.be.an('array'); });",
-                  "pm.test(\"First user name is correct\", function () { var jsonData = pm.response.json(); pm.expect(jsonData[0].name).to.be.a('string'); });"
+                  "pm.test(\"First user name is Leanne Graham\", function () { var jsonData = pm.response.json(); pm.expect(jsonData[0].name).to.eql('Leanne Graham'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -549,8 +729,14 @@
             "url": {
               "raw": "https://jsonplaceholder.typicode.com/users",
               "protocol": "https",
-              "host": ["jsonplaceholder", "typicode", "com"],
-              "path": ["users"]
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "users"
+              ]
             }
           }
         }
