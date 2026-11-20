@@ -72,4 +72,12 @@ class BonusTest {
         assertEquals(5, DataFlowTargets.bonus(
                 new int[]{1, 1, 1, 0, 1}, 4));
     }
+    @Test
+    @DisplayName("DU_M2_kill_best_must_track_longest_consecutive_streak")
+    void duM2KillBestMustTrackLongestConsecutiveStreak() {
+        // Five total present days but no streak reaches five.
+        assertEquals(0, DataFlowTargets.bonus(
+                new int[]{1, 1, 0, 1, 1, 1}, 6));
+    }
+
 }
