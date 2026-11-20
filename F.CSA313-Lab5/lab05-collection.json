@@ -1,0 +1,567 @@
+{
+  "info": {
+    "name": "Lab05 - Course Registration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "TC1 - Happy Path",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Setup Student",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS201\"]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students/B231234567",
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "B231234567"]
+            }
+          }
+        },
+        {
+          "name": "Setup Course",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/CS313",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "CS313"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Result is OK\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"OK\"); });",
+                  "pm.test(\"RegistrationID is a number\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.registrationID).to.be.a('number'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"B231234567\", \"courseID\": \"CS313\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC2 - No Student",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Setup Course",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": []}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/CS101",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "CS101"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Result is ERROR_NO_STUDENT\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"ERROR_NO_STUDENT\"); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"NONEXISTENT\", \"courseID\": \"CS101\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC3 - Inactive Student",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Setup Student",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"inactive\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students/S2",
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "S2"]
+            }
+          }
+        },
+        {
+          "name": "Setup Course",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": []}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/CS101",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "CS101"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Result is ERROR_INACTIVE_STUDENT\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"ERROR_INACTIVE_STUDENT\"); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"S2\", \"courseID\": \"CS101\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC4 - No Course",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Setup Student",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students/S3",
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "S3"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Result is ERROR_NO_COURSE\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"ERROR_NO_COURSE\"); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"S3\", \"courseID\": \"NONEXISTENT\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC5 - Missing Prereqs",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Setup Student",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": []}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students/S4",
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "S4"]
+            }
+          }
+        },
+        {
+          "name": "Setup Course",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/CS313",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "CS313"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Result is ERROR_PREREQUISITES\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"ERROR_PREREQUISITES\"); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"S4\", \"courseID\": \"CS313\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC6 - Bad Request",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Result is ERROR_BAD_REQUEST\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"ERROR_BAD_REQUEST\"); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"S1\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC7 - No Prereqs Req",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Setup Student",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": []}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students/S5",
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "S5"]
+            }
+          }
+        },
+        {
+          "name": "Setup Course",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": []}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/CS101",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "CS101"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Result is OK\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"OK\"); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"S5\", \"courseID\": \"CS101\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC8 - Empty Courses",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Setup Student",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": []}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students/S6",
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "S6"]
+            }
+          }
+        },
+        {
+          "name": "Setup Course",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/CS313",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "CS313"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Result is ERROR_PREREQUISITES\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"ERROR_PREREQUISITES\"); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"S6\", \"courseID\": \"CS313\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC9 - Bad JSON",
+      "folder": "Tests",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Result is ERROR_BAD_JSON\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.result).to.eql(\"ERROR_BAD_JSON\"); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"studentID\": \"S1\", ",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/registrations",
+              "host": ["{{baseUrl}}"],
+              "path": ["registrations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC10 - JSONPlaceholder Users",
+      "folder": "External",
+      "item": [
+        {
+          "name": "GET Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Response is an array\", function () { pm.expect(pm.response.json()).to.be.an('array'); });",
+                  "pm.test(\"First user name is correct\", function () { var jsonData = pm.response.json(); pm.expect(jsonData[0].name).to.be.a('string'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/users",
+              "protocol": "https",
+              "host": ["jsonplaceholder", "typicode", "com"],
+              "path": ["users"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}
