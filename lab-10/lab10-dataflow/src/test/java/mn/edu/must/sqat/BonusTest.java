@@ -37,40 +37,24 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BonusTest {
 
     // =========================================================================
-    // ALL-DEFS phase tests
-    // These 3 tests cover all def nodes.
+    // ALL-DEFS phase: minimum 2 tests.
+    // T1 reaches every definition except score@49; T2 reaches score@49 -> use@54.
     // =========================================================================
 
     @Test
-    @DisplayName("AllDefs-T1: all-zero attendance, threshold=0 => score=5 [defs: present35, streak36, best37, a38, score49, score51]")
-    void allDefs_T1_allZero() {
-        // attendance=[0,0,0], threshold=0
-        // Loop: a=0 each time => streak stays 0 (def@46 each iter), best stays 0
-        // present=0 >= threshold=0 => score=5 (def@51)
-        // best=0 < 5 => score stays 5
-        // Covers: present def@35->use@50, streak def@36->use@41(first iter check via @42),
-        //         streak def@46->use@42(next iter), best def@37->use@42,
-        //         a def@38->use@39, score def@49->use@56, score def@51->use@56
-        assertEquals(5, DataFlowTargets.bonus(new int[]{0, 0, 0}, 0));
+    @DisplayName("AllDefs-T1: present threshold met and streak reset/recovery => score=8")
+    void allDefs_T1_allDefinitionsExceptInitialScore() {
+        // present=6 >= 5 and longest streak=5 => score=8.
+        // Includes streak@46 -> streak@41 after a missed day.
+        assertEquals(8, DataFlowTargets.bonus(new int[]{1, 0, 1, 1, 1, 1, 1}, 5));
     }
 
     @Test
-    @DisplayName("AllDefs-T2: long streak>=5, threshold met => score=8 [defs: present40, streak41, best43, score54]")
-    void allDefs_T2_longStreak() {
-        // attendance=[1,1,1,1,1], threshold=3
-        // present=5 >= threshold=3 => score=5; best=5 >= 5 => score=8
-        // Covers: present def@40->use@50, streak def@41->use@42,
-        //         best def@43->use@53, score def@54->use@56
-        assertEquals(8, DataFlowTargets.bonus(new int[]{1, 1, 1, 1, 1}, 3));
-    }
-
-    @Test
-    @DisplayName("AllDefs-T3: threshold not met, short streak => score=0 [covers score def@49 not overwritten path check]")
-    void allDefs_T3_noBonus() {
-        // attendance=[1,1], threshold=5
-        // present=2 < threshold=5 => score stays 0 (def@49->use@56 direct)
-        // best=2 < 5 => no streak bonus
-        assertEquals(0, DataFlowTargets.bonus(new int[]{1, 1}, 5));
+    @DisplayName("AllDefs-T2: threshold not met but streak bonus applies => score=3")
+    void allDefs_T2_initialScoreReachesBonusUse() {
+        // present=5 < 6: score@49 survives to score+3 at line 54.
+        // best=5: score@54 reaches return at line 56.
+        assertEquals(3, DataFlowTargets.bonus(new int[]{1, 1, 1, 1, 1}, 6));
     }
 
     // =========================================================================
