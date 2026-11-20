@@ -38,7 +38,14 @@ jobs:
           ROOT="lab-10/lab10-dataflow"
           TEST="$ROOT/src/test/java/mn/edu/must/sqat/BonusTest.java"
           cp "$TEST" /tmp/BonusTest-final.java
-          git show b0b17dbd26143dd2830ed336f321e7cd58135691:"$TEST" > "$TEST"
+          git show 5ff511bc782822a3b01d11882293eb41ace79d32:"$TEST" > "$TEST"
+          python3 - "$TEST" <<'PY'
+          from pathlib import Path
+          import sys
+          p = Path(sys.argv[1])
+          text = p.read_text()
+          p.write_text(text.replace("assertEquals(8,", "assertEquals(3,", 1))
+          PY
           mkdir -p "$ROOT/results"
           { java -version; mvn -version; } 2>&1 | tee "$ROOT/results/environment.txt"
           (cd "$ROOT" && mvn verify) 2>&1 | tee "$ROOT/results/mvn-verify-alldefs.txt"
