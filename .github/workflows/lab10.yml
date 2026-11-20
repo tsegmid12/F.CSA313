@@ -34,6 +34,7 @@ jobs:
           cp "$TEST" /tmp/BonusTest-final.java
           git show 5ff511bc782822a3b01d11882293eb41ace79d32:"$TEST" > "$TEST"
           mkdir -p "$ROOT/results"
+          { java -version; mvn -version; } 2>&1 | tee "$ROOT/results/environment.txt"
           (cd "$ROOT" && mvn verify) 2>&1 | tee "$ROOT/results/mvn-verify-alldefs.txt"
           cp "$ROOT/target/site/jacoco/jacoco.csv" "$ROOT/results/jacoco-alldefs.csv"
           cp /tmp/BonusTest-final.java "$TEST"
