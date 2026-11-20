@@ -63,12 +63,12 @@ The CFG is intended to show the validation guard, the enhanced-for iteration (th
 | 42 | — | `streak` and `best` p-use (`streak > best`) |
 | 43 | `best = streak` | `streak` c-use |
 | 46 | `streak = 0` | —; this definition kills the prior streak definition |
-| 48 | `score = 0` | — |
-| 49 | — | `present` and `threshold` p-use (`present >= threshold`) |
-| 50 | `score = 5` | — |
-| 52 | — | `best` p-use (`best >= 5`) |
-| 53 | `score = score + 3` | `score` c-use |
-| 55 | — | `score` c-use (return) |
+| 49 | `score = 0` | — |
+| 50 | — | `present` and `threshold` p-use (`present >= threshold`) |
+| 51 | `score = 5` | — |
+| 53 | — | `best` p-use (`best >= 5`) |
+| 54 | `score = score + 3` | `score` c-use |
+| 56 | — | `score` c-use (return) |
 
 ### B3. Def-clear DU pairs
 
@@ -91,21 +91,21 @@ The CFG is intended to show the validation guard, the enhanced-for iteration (th
 | best | 36 | 52 | p | No positive attendance ever redefines best | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
 | best | 43 | 42 | p | A later positive day compares with the previous best | longStreakCoversBestUpdateAndAdditionalScore / mixedAttendanceCoversStreakKillAndRestart |
 | best | 43 | 52 | p | Final best reaches the bonus decision without another best update | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
-| score | 48 | 53 | c | Threshold is false and the streak condition is true | allDefs_initialScoreDefinitionReachesBonusAddition |
-| score | 48 | 55 | c | Threshold and streak bonus are both false | allAbsentCoversElseResetAndNoBonus |
-| score | 50 | 53 | c | Base score definition reaches the +3 calculation | allDefs_baseScoreDefinitionReachesBonusAddition |
-| score | 50 | 55 | c | Base score reaches return without streak bonus | shortStreakCoversBestFalseAndBaseScoreOnly |
-| score | 53 | 55 | c | Updated score reaches return | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
+| score | 49 | 54 | c | Threshold is false and the streak condition is true | allDefs_initialScoreDefinitionReachesBonusAddition |
+| score | 49 | 56 | c | Threshold and streak bonus are both false | allAbsentCoversElseResetAndNoBonus |
+| score | 51 | 54 | c | Base score definition reaches the +3 calculation | allDefs_baseScoreDefinitionReachesBonusAddition |
+| score | 51 | 56 | c | Base score reaches return without streak bonus | shortStreakCoversBestFalseAndBaseScoreOnly |
+| score | 54 | 56 | c | Updated score reaches return | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
 
 **Kill at line 46:** the assignment `streak = 0` kills any earlier definition of `streak` (initialization at line 35 or increment at line 41) along a path that reaches this assignment. Consequently, an earlier streak definition cannot be paired with a later line-42 comparison if the path crosses line 46 first. The reset definition at line 46 can reach the line-41 increment when a later attendance element is positive.
 
-**Infeasible / non-DU combinations:** (1) `streak@35 → line 42` is infeasible because every path to line 42 first executes line 41, which redefines streak and kills line 35. (2) A definition at line 41 cannot reach a later line-42 use across an absent element because line 46 resets streak in between. (3) `best@36 → line 52` is possible only when there are no positive attendance values; once a positive value occurs, line 43 updates best before the final line-52 test. (4) `score@48 → line 53` cannot be def-clear when the threshold predicate is true because line 50 redefines score first; the pair is feasible only when the threshold is false and the streak bonus is true. These are not additional DU pairs where the intervening assignment kills the reaching definition.
+**Infeasible / non-DU combinations:** (1) `streak@35 → line 42` is infeasible because every path to line 42 first executes line 41, which redefines streak and kills line 35. (2) A definition at line 41 cannot reach a later line-42 use across an absent element because line 46 resets streak in between. (3) `best@36 → line 53` is possible only when there are no positive attendance values; once a positive value occurs, line 43 updates best before the final line-52 test. (4) `score@49 → line 54` cannot be def-clear when the threshold predicate is true because line 51 redefines score first; the pair is feasible only when the threshold is false and the streak bonus is true. These are not additional DU pairs where the intervening assignment kills the reaching definition.
 
 The foreach p-use has a true outcome when an element exists and a false outcome when iteration terminates. The true outcome is exercised by every non-empty attendance test; the false outcome is exercised after the final element and by the empty-array case. The `a > 0` predicate's true and false outcomes are both feasible and are exercised by positive and absent attendance values. The `streak > best` predicate's true and false outcomes are both feasible (first/longer streak versus a shorter streak after an earlier best). The threshold and final best predicates likewise have feasible true and false outcomes in the test set.
 
 ### B4. Two-stage test design
 
-**All-defs minimum: two tests.** Two are necessary because the two definitions of `score` at lines 48 and 50 cannot both reach the line-53 use in one execution: if the threshold branch is true, line 50 redefines score and kills line 48 before the +3 calculation. The first all-defs test makes the threshold condition false and the streak condition true, so line 48 reaches line 53. The second makes the threshold condition true and the streak condition true, so line 50 reaches line 53. The tests are retained as the first stage in the commit history.
+**All-defs minimum: two tests.** Two are necessary because the two definitions of `score` at lines 49 and 51 cannot both reach the line-53 use in one execution: if the threshold branch is true, line 51 redefines score and kills line 50 before the +3 calculation. The first all-defs test makes the threshold condition false and the streak condition true, so line 50 reaches line 54. The second makes the threshold condition true and the streak condition true, so line 51 reaches line 54. The tests are retained as the first stage in the commit history.
 
 **All-DU-pairs stage.** Additional tests cover null and negative validation, empty input, all-absent input, mixed attendance with a streak reset, a long streak, and a short streak. The tests have Latin-only method names and display names so their console output remains readable on Windows.
 
