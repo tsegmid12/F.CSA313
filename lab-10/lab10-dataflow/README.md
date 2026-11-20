@@ -77,20 +77,20 @@ The CFG is intended to show the validation guard, the enhanced-for iteration (th
 | attendance | parameter | 32 | p | Guard reads the parameter | invalidNullAttendanceTakesGuardTrue / invalidNegativeThresholdTakesGuardTrue |
 | attendance | parameter | 38 | p | Iteration checks for another element | allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
 | threshold | parameter | 32 | p | Negative-threshold check is evaluated when attendance is non-null | invalidNegativeThresholdTakesGuardTrue |
-| threshold | parameter | 49 | p | Valid input reaches the score threshold decision | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
+| threshold | parameter | 50 | p | Valid input reaches the score threshold decision | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
 | a | 38 | 39 | p | Each fetched element is tested before next assignment | allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
 | present | 34 | 40 | c | First present day increments initial count | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
-| present | 34 | 49 | p | No present day has redefined present | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
+| present | 34 | 50 | p | No present day has redefined present | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
 | present | 40 | 40 | c | A later present day increments the previous count | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
-| present | 40 | 49 | p | Last count definition reaches threshold decision | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| present | 40 | 50 | p | Last count definition reaches threshold decision | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
 | streak | 35 | 41 | c | First element is present | longStreakCoversBestUpdateAndAdditionalScore |
 | streak | 41 | 41 | c | Consecutive present days carry the previous streak | longStreakCoversBestUpdateAndAdditionalScore |
 | streak | 41 | 42 | p | Updated streak is compared with best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
 | streak | 46 | 41 | c | A present day follows an absent day; reset value is incremented | mixedAttendanceCoversStreakKillAndRestart |
 | best | 36 | 42 | p | First present day compares streak with initial best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
-| best | 36 | 52 | p | No positive attendance ever redefines best | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
+| best | 36 | 53 | p | No positive attendance ever redefines best | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
 | best | 43 | 42 | p | A later positive day compares with the previous best | longStreakCoversBestUpdateAndAdditionalScore / mixedAttendanceCoversStreakKillAndRestart |
-| best | 43 | 52 | p | Final best reaches the bonus decision without another best update | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| best | 43 | 53 | p | Final best reaches the bonus decision without another best update | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
 | score | 49 | 54 | c | Threshold is false and the streak condition is true | allDefs_initialScoreDefinitionReachesBonusAddition |
 | score | 49 | 56 | c | Threshold and streak bonus are both false | allAbsentCoversElseResetAndNoBonus |
 | score | 51 | 54 | c | Base score definition reaches the +3 calculation | allDefs_baseScoreDefinitionReachesBonusAddition |
@@ -105,7 +105,7 @@ The foreach p-use has a true outcome when an element exists and a false outcome 
 
 ### B4. Two-stage test design
 
-**All-defs minimum: two tests.** Two are necessary because the two definitions of `score` at lines 49 and 51 cannot both reach the line-53 use in one execution: if the threshold branch is true, line 51 redefines score and kills line 50 before the +3 calculation. The first all-defs test makes the threshold condition false and the streak condition true, so line 50 reaches line 54. The second makes the threshold condition true and the streak condition true, so line 51 reaches line 54. The tests are retained as the first stage in the commit history.
+**All-defs minimum: two tests.** Two are necessary because the two definitions of `score` at lines 49 and 51 cannot both reach the line-54 use in one execution: if the threshold branch is true, line 51 redefines score and kills the line-49 definition before the +3 calculation. The first all-defs test makes the threshold condition false and the streak condition true, so the line-49 definition reaches line 54. The second makes the threshold condition true and the streak condition true, so line 51 reaches line 54. The tests are retained as the first stage in the commit history.
 
 **All-DU-pairs stage.** Additional tests cover null and negative validation, empty input, all-absent input, mixed attendance with a streak reset, a long streak, and a short streak. The tests have Latin-only method names and display names so their console output remains readable on Windows.
 
