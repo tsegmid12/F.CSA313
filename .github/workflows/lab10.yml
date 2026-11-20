@@ -25,6 +25,12 @@ jobs:
           java-version: "17"
           cache: maven
 
+      - name: Install Graphviz and render CFG
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+          dot -Tpng "lab-10/lab10-dataflow/cfg-bonus.dot" -o "lab-10/lab10-dataflow/cfg-bonus.png"
+
       - name: Capture all-defs run
         shell: bash
         run: |
@@ -74,7 +80,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add lab-10/lab10-dataflow/results
+          git add lab-10/lab10-dataflow/results lab-10/lab10-dataflow/cfg-bonus.png
           if ! git diff --cached --quiet; then
             git commit -m "Lab 10: add Maven and JaCoCo evidence"
             git push origin HEAD:lab10-rebuild
