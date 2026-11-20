@@ -1,14 +1,21 @@
 # Lab 10 — Dataflow Testing: Definition–Use Pairs
 
 **Student:** Tsegmid Enkhbold  
-**Student ID:** To be added before submission (the ID was not present in the materials available for this rebuild).
+**Student ID:** Not supplied yet — must be added before submission.
 
 ## Environment
 
-The build environment is recorded verbatim in [results/environment.txt](results/environment.txt). The workflow uses Eclipse Temurin JDK 17 and Maven on GitHub Actions. The complete local versions must be recorded here if the project is also verified on the student's own machine.
+The following is the complete output captured by the clean GitHub Actions build environment (also saved in [results/environment.txt](results/environment.txt)).
 
 ```text
-See results/environment.txt for the complete java -version and mvn -version output.
+openjdk version "17.0.21" 2026-10-20
+OpenJDK Runtime Environment Temurin-17.0.21+9 (build 17.0.21+9)
+OpenJDK 64-Bit Server VM Temurin-17.0.21+9 (build 17.0.21+9, mixed mode, sharing)
+Apache Maven 3.9.15 (98b2cdbfdb5f1ac8781f537ea9acccaed7922349)
+Maven home: /usr/share/apache-maven-3.9.15
+Java version: 17.0.21, vendor: Eclipse Adoptium, runtime: /usr/lib/jvm/temurin-17-jdk-amd64
+Default locale: en, platform encoding: UTF-8
+OS name: "linux", version: "7.0.0-1019-azure", arch: "amd64", family: "unix"
 ```
 
 ## Part A — gcd(x, y)
@@ -19,7 +26,6 @@ The source file is kept unchanged. The line numbers below refer to `DataFlowTarg
 
 | Variable | Definition | Use | Kind | Def-clear path / condition | Test |
 |---|---:|---:|---|---|---|
-| x | 13 | 15 | p-use indirectly? | The loop condition reads y, not x; therefore this is **not** an x-use. | — |
 | x | 13 | 16 | c-use | First loop iteration, when y != 0 | `gcd_12_8_coversLoopDuPairs` |
 | x | 13 | 20 | c-use | Initial y == 0; no loop assignment kills x | `gcd_7_0_covers_initialXToReturnAndFalseWhile` |
 | x | 17 | 16 | c-use | At least one further loop iteration after x = y | `gcd_12_8_coversLoopDuPairs` |
@@ -68,28 +74,28 @@ The CFG is intended to show the validation guard, the enhanced-for iteration (th
 
 | Variable | Def line | Use line | Use type | Def-clear condition / note | Test ID |
 |---|---:|---:|---|---|---|
-| attendance | parameter | 32 | p | Guard reads the parameter | invalid-null / invalid-negative |
-| attendance | parameter | 38 | p | Iteration checks for another element | mixed / long / absent |
-| threshold | parameter | 32 | p | Negative-threshold check is evaluated when attendance is non-null | invalid-negative |
-| threshold | parameter | 49 | p | Valid input reaches the score threshold decision | empty / short / all-defs |
-| a | 38 | 39 | p | Each fetched element is tested before next assignment | mixed / absent / long |
-| present | 34 | 40 | c | First present day increments initial count | mixed / long |
-| present | 34 | 49 | p | No present day has redefined present | empty / all-absent |
-| present | 40 | 40 | c | A later present day increments the previous count | mixed / long |
-| present | 40 | 49 | p | Last count definition reaches threshold decision | mixed / long |
-| streak | 35 | 41 | c | First element is present | long |
-| streak | 41 | 41 | c | Consecutive present days carry the previous streak | long |
-| streak | 41 | 42 | p | Updated streak is compared with best | long / short |
-| streak | 46 | 41 | c | A present day follows an absent day; reset value is incremented | mixed |
-| best | 36 | 42 | p | First present day compares streak with initial best | long / short |
-| best | 36 | 52 | p | No positive attendance ever redefines best | empty / all-absent |
-| best | 43 | 42 | p | A later positive day compares with the previous best | long / mixed |
-| best | 43 | 52 | p | Final best reaches the bonus decision without another best update | long / short |
-| score | 48 | 53 | c | Threshold is false and the streak bonus branch is true | all-defs initial-score |
-| score | 48 | 55 | c | Threshold and streak bonus are both false | all-absent |
-| score | 50 | 53 | c | Base score definition reaches the +3 calculation | all-defs base-score |
-| score | 50 | 55 | c | Base score reaches return without streak bonus | short |
-| score | 53 | 55 | c | Updated score reaches return | all-defs initial-score / all-defs base-score |
+| attendance | parameter | 32 | p | Guard reads the parameter | invalidNullAttendanceTakesGuardTrue / invalidNegativeThresholdTakesGuardTrue |
+| attendance | parameter | 38 | p | Iteration checks for another element | allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| threshold | parameter | 32 | p | Negative-threshold check is evaluated when attendance is non-null | invalidNegativeThresholdTakesGuardTrue |
+| threshold | parameter | 49 | p | Valid input reaches the score threshold decision | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
+| a | 38 | 39 | p | Each fetched element is tested before next assignment | allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| present | 34 | 40 | c | First present day increments initial count | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| present | 34 | 49 | p | No present day has redefined present | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
+| present | 40 | 40 | c | A later present day increments the previous count | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| present | 40 | 49 | p | Last count definition reaches threshold decision | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| streak | 35 | 41 | c | First element is present | longStreakCoversBestUpdateAndAdditionalScore |
+| streak | 41 | 41 | c | Consecutive present days carry the previous streak | longStreakCoversBestUpdateAndAdditionalScore |
+| streak | 41 | 42 | p | Updated streak is compared with best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| streak | 46 | 41 | c | A present day follows an absent day; reset value is incremented | mixedAttendanceCoversStreakKillAndRestart |
+| best | 36 | 42 | p | First present day compares streak with initial best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| best | 36 | 52 | p | No positive attendance ever redefines best | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
+| best | 43 | 42 | p | A later positive day compares with the previous best | longStreakCoversBestUpdateAndAdditionalScore / mixedAttendanceCoversStreakKillAndRestart |
+| best | 43 | 52 | p | Final best reaches the bonus decision without another best update | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| score | 48 | 53 | c | Threshold is false and the streak condition is true | allDefs_initialScoreDefinitionReachesBonusAddition |
+| score | 48 | 55 | c | Threshold and streak bonus are both false | allAbsentCoversElseResetAndNoBonus |
+| score | 50 | 53 | c | Base score definition reaches the +3 calculation | allDefs_baseScoreDefinitionReachesBonusAddition |
+| score | 50 | 55 | c | Base score reaches return without streak bonus | shortStreakCoversBestFalseAndBaseScoreOnly |
+| score | 53 | 55 | c | Updated score reaches return | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
 
 **Kill at line 46:** the assignment `streak = 0` kills any earlier definition of `streak` (initialization at line 35 or increment at line 41) along a path that reaches this assignment. Consequently, an earlier streak definition cannot be paired with a later line-42 comparison if the path crosses line 46 first. The reset definition at line 46 can reach the line-41 increment when a later attendance element is positive.
 
@@ -103,7 +109,14 @@ The foreach p-use has a true outcome when an element exists and a false outcome 
 
 ### B5. JaCoCo interpretation
 
-The all-defs and final JaCoCo CSV files are generated by the workflow and stored under `results/`. The exact Branch and Line missed/covered counts must be read from those CSV files; no coverage percentage is inferred from the manually prepared DU table. The required final result is `BRANCH_MISSED = 0` (16/16 branches) and `LINE_MISSED = 1`, where the single missed line is the implicit Java constructor on source line 7. No test should instantiate `DataFlowTargets` just to cover that compiler-generated constructor.
+The exact metrics below are copied from the committed JaCoCo CSV files.
+
+| Run | Tests run | Branch missed | Branch covered | Line missed | Line covered | Instruction missed | Instruction covered |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| All-defs stage | 4 total (2 GCD + 2 bonus) | 5 | 11 | 3 | 21 | 10 | 71 |
+| Final all-DU-pairs stage | 12 total (2 GCD + 10 bonus) | 0 | 16 | 1 | 23 | 3 | 78 |
+
+The final result is `BRANCH_MISSED = 0` (16/16 branches) and `LINE_MISSED = 1`, where the single missed line is the implicit Java constructor on source line 7. No test should instantiate `DataFlowTargets` just to cover that compiler-generated constructor.
 
 Branch coverage is not DU coverage. Branch coverage only shows that both outcomes of each decision were executed; it does not prove that each variable definition reached each relevant use along a def-clear path. For example, a branch can be taken while a particular earlier definition has already been killed by a redefinition, leaving a DU pair uncovered even though the branch itself is covered.
 
@@ -113,11 +126,11 @@ The CI workflow temporarily applies each mutation to the original `DataFlowTarge
 
 | Mutation | Fault | Expected observation | Evidence |
 |---|---|---|---|
-| M1 | Remove `streak = streak + 1` | Long-streak expected result fails because the best streak is no longer accumulated | `results/mvn-test-M1.txt` |
-| M2 | Replace `best = streak` with `best = present` | Regression test with five total present days but maximum streak of three fails; the mutant incorrectly awards the streak bonus | `results/mvn-test-M2.txt` |
-| M3 | Add unused `int total = present + best;` | Tests still pass because the new definition is dead and does not affect observable output; static analysis / IDE inspection should flag the unused local variable | `results/mvn-test-M3.txt` |
+| M1 | Remove `streak = streak + 1` | 12 tests, 3 failures: `allDefs_baseScoreDefinitionReachesBonusAddition` (expected 8, was 5), `allDefs_initialScoreDefinitionReachesBonusAddition` (expected 3, was 0), and `longStreakCoversBestUpdateAndAdditionalScore` (expected 8, was 5) | `results/mvn-test-M1.txt` |
+| M2 | Replace `best = streak` with `best = present` | 12 tests, 2 failures: `duM2KillBestMustTrackLongestConsecutiveStreak` (expected 0, was 3) and `mixedAttendanceCoversStreakKillAndRestart` (expected 5, was 8) | `results/mvn-test-M2.txt` |
+| M3 | Add unused `int total = present + best;` | 12 tests, 0 failures; the dead local definition does not affect program output. An IDE/static-analysis inspection is required to report the unused local variable | `results/mvn-test-M3.txt` |
 
-The M2 regression case is `duM2KillBestMustTrackLongestConsecutiveStreak`: attendance `{1, 1, 0, 1, 1, 1}` has five present days but the longest consecutive streak is only three. With threshold six, the correct result is zero; the mutated assignment incorrectly makes `best` equal to the total present count and returns three. M3 is a dead definition, so runtime tests cannot observe it; a static-analysis inspection is the appropriate tool.
+The M2 regression case is `duM2KillBestMustTrackLongestConsecutiveStreak`: attendance `{1, 1, 0, 1, 1, 1}` has five present days but the longest consecutive streak is only three. With threshold six, the correct result is zero; the mutated assignment incorrectly makes `best` equal to the total present count and returns three. The mixed-attendance test also catches the same mutation. M3 is a dead definition, so runtime tests cannot observe it; the Java compiler does not warn about this unused local, and an IDE/static-analysis inspection is the appropriate tool. No IDE-specific warning was captured in the automated CI run.
 
 ## Conclusion
 
