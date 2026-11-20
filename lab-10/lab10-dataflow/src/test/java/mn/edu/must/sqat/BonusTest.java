@@ -50,7 +50,7 @@ public class BonusTest {
         // best=0 < 5 => score stays 5
         // Covers: present def@35->use@50, streak def@36->use@41(first iter check via @42),
         //         streak def@46->use@42(next iter), best def@37->use@42,
-        //         a def@38->use@39, score def@49->use@51->use@56, score def@51->use@56
+        //         a def@38->use@39, score def@49->use@56, score def@51->use@56
         assertEquals(5, DataFlowTargets.bonus(new int[]{0, 0, 0}, 0));
     }
 
