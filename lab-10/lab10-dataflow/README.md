@@ -72,7 +72,7 @@ ID, зам нь definition-ээс use хүртэлх def-clear execution path ю
 | streak | 36 init, 41 increment, 46 reset | 41 c-use, 42 p-use | lines 41 and 46 |
 | best | 37 init, 43 update | 42 p-use, 53 p-use | line 43 |
 | a | 38 for-each definition | 39 p-use | next iteration definition |
-| score | 49 init, 51 base, 54 streak bonus | 51 c-use, 54 c-use, 56 c-use | lines 51 and 54 |
+| score | 49 init, 51 base, 54 streak bonus | 54 c-use, 56 c-use | lines 51 and 54 |
 
 | Def | Use | Kind | Kill before use | Test IDs | Feasibility |
 |---|---|---|---|---|---|
@@ -88,9 +88,9 @@ ID, зам нь definition-ээс use хүртэлх def-clear execution path ю
 | best@37 | 42,53 | p-use | 43 | T1,T15 | reachable |
 | best@43 | 42,53 | p-use | 43 | T16,T17 | reachable |
 | a@38 | 39 | p-use T/F | next iteration | T18,T19 | reachable |
-| score@49 | 51,54,56 | c-use | 51/54 | T3,T21,T25 | reachable |
+| score@49 | 54,56 | c-use | 51/54 | T3,T17,T21 | reachable |
 | score@51 | 54,56 | c-use | 54 | T20,T25 | reachable |
-| score@54 | 56 | c-use | return | T2,T20 | reachable |
+| score@54 | 56 | c-use | return | T2,T17,T20 | reachable |
 
 Validation throw paths cannot reach loop/body uses after line 32; those
 cross-path combinations are infeasible because execution terminates.
@@ -100,10 +100,12 @@ cross-path combinations are infeasible because execution terminates.
 [cfg-bonus.png](docs/cfg-bonus.png) нь мөрийн дугаартай зангилаа, бодит
 тестийн method name-тэй ирмэгүүдийг харуулна.
 Нөхцөлт use бүрийн true/false зам, kill тэмдэглэгээ, бүх DU хос болон
-биелэшгүй хосын үндэслэлийг [bonus-du-table.md](C:/4A/F.CSA313/lab-10/lab10-dataflow/docs/bonus-du-table.md)-д
+биелэшгүй хосын үндэслэлийг [bonus-du-table.md](docs/bonus-du-table.md)-д
 өгсөн.
 
 ## JaCoCo
+
+JaCoCo plugin-ийн хувилбарыг Java 27-той нийцүүлэхээр **0.8.16** болгосон. Өмнөх `results/` доторх Maven log болон CSV файлууд JaCoCo 0.8.12 ашигласан хуучин run тул шинэ хувилбараар `mvn clean verify` дахин ажиллуулж, шинэ тайлангаар солих шаардлагатай. Доорх coverage тоонууд нь өмнөх хадгалсан CSV-ээс авсан бөгөөд шинэ run-оор баталгаажтал эцсийн үр дүн гэж үзэхгүй.
 
 Эцсийн тайлангийн зорилтот үзүүлэлт:
 
@@ -114,8 +116,8 @@ LINE_MISSED = 1
 
 `LINE_MISSED=1` нь далд default constructor бөгөөд зөвшөөрөгдөнө.
 
-`jacoco-alldefs.csv`: `BRANCH_MISSED=3`, `BRANCH_COVERED=13`,
-`LINE_MISSED=2`, `LINE_COVERED=22`. `jacoco-final.csv`:
+Хуучин `jacoco-alldefs.csv`: `BRANCH_MISSED=3`, `BRANCH_COVERED=13`,
+`LINE_MISSED=2`, `LINE_COVERED=22`. Хуучин `jacoco-final.csv`:
 `BRANCH_MISSED=0`, `BRANCH_COVERED=16`, `LINE_MISSED=1`,
 `LINE_COVERED=23`.
 
