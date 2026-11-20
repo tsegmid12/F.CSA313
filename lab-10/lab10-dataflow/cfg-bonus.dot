@@ -13,12 +13,12 @@ digraph BonusCFG {
   better [shape=diamond, label="42: streak > best ?"];
   best [label="43: best = streak"];
   reset [label="46: streak = 0\n(kills previous streak def)"];
-  score0 [label="48: score = 0"];
-  threshold [shape=diamond, label="49: present >= threshold ?"];
-  score5 [label="50: score = 5"];
-  best5 [shape=diamond, label="52: best >= 5 ?"];
-  add3 [label="53: score = score + 3"];
-  ret [label="55: return score", fillcolor="#dcfce7"];
+  score0 [label="49: score = 0"];
+  threshold [shape=diamond, label="50: present >= threshold ?"];
+  score5 [label="51: score = 5"];
+  best5 [shape=diamond, label="53: best >= 5 ?"];
+  add3 [label="54: score = score + 3"];
+  ret [label="56: return score", fillcolor="#dcfce7"];
   entry -> guard;
   guard -> error [label="T: invalidNullAttendanceTakesGuardTrue / invalidNegativeThresholdTakesGuardTrue"];
   guard -> init [label="F: emptyAttendanceCoversZeroIterationsAndThresholdTrue / longStreakCoversBestUpdateAndAdditionalScore"];
