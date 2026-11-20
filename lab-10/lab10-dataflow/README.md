@@ -74,28 +74,28 @@ The CFG is intended to show the validation guard, the enhanced-for iteration (th
 
 | Variable | Def line | Use line | Use type | Def-clear condition / note | Test ID |
 |---|---:|---:|---|---|---|
-| attendance | parameter | 32 | p | Guard reads the parameter | invalidNullAttendanceTakesGuardTrue / invalidNegativeThresholdTakesGuardTrue |
-| attendance | parameter | 38 | p | Iteration checks for another element | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / allAbsentCoversElseResetAndNoBonus / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore |
-| threshold | parameter | 32 | p | Negative-threshold check is evaluated when attendance is non-null | invalidNegativeThresholdTakesGuardTrue |
-| threshold | parameter | 50 | p | Valid input reaches the score threshold decision | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
-| a | 38 | 39 | p | Each fetched element is tested before next assignment | allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
-| present | 35 | 40 | c | First present day increments initial count | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
-| present | 35 | 50 | p | No present day has redefined present | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
-| present | 40 | 40 | c | A later present day increments the previous count | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
-| present | 40 | 50 | p | Last count definition reaches threshold decision | mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
-| streak | 36 | 41 | c | First element is present | longStreakCoversBestUpdateAndAdditionalScore |
-| streak | 41 | 41 | c | Consecutive present days carry the previous streak | longStreakCoversBestUpdateAndAdditionalScore |
-| streak | 41 | 42 | p | Updated streak is compared with best | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
-| streak | 46 | 41 | c | A present day follows an absent day; reset value is incremented | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart |
-| best | 37 | 42 | p | First present day compares streak with initial best | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| attendance | parameter | 32 | p | Null validation reads attendance | invalidNullAttendanceTakesGuardTrue / invalidNegativeThresholdTakesGuardTrue |
+| attendance | parameter | 38 | p | Enhanced-for checks for the next element | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| threshold | parameter | 32 | p | Negative-threshold check (evaluated when attendance is non-null) | invalidNegativeThresholdTakesGuardTrue |
+| threshold | parameter | 50 | p | Score threshold decision | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / shortStreakCoversBestFalseAndBaseScoreOnly |
+| a | 38 | 39 | p | Each fetched element is tested | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / allAbsentCoversElseResetAndNoBonus / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| present | 35 | 40 | c | First positive day increments initial count | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| present | 35 | 50 | p | No positive attendance has redefined present | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
+| present | 40 | 40 | c | A later positive day increments the prior count | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore |
+| present | 40 | 50 | p | Last count definition reaches threshold decision | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart / longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| streak | 36 | 41 | c | Initial streak value is incremented on the first positive day | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore |
+| streak | 41 | 41 | c | Consecutive positive days carry the previous streak | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore |
+| streak | 41 | 42 | p | Updated streak is compared with best | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| streak | 46 | 41 | c | A positive day follows an absent day; reset value is incremented | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / mixedAttendanceCoversStreakKillAndRestart |
+| best | 37 | 42 | p | First positive day compares streak with initial best | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
 | best | 37 | 53 | p | No positive attendance ever redefines best | emptyAttendanceCoversZeroIterationsAndThresholdTrue / allAbsentCoversElseResetAndNoBonus |
 | best | 43 | 42 | p | A later positive day compares with the previous best | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore / mixedAttendanceCoversStreakKillAndRestart |
-| best | 43 | 53 | p | Final best reaches the bonus decision without another best update | longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
+| best | 43 | 53 | p | Final best reaches bonus decision without a later best update | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore / shortStreakCoversBestFalseAndBaseScoreOnly |
 | score | 49 | 54 | c | Threshold is false and the streak condition is true | allDefs_initialScoreDefinitionReachesBonusAddition |
 | score | 49 | 56 | c | Threshold and streak bonus are both false | allAbsentCoversElseResetAndNoBonus |
 | score | 51 | 54 | c | Base score definition reaches the +3 calculation | allDefs_baseScoreDefinitionReachesBonusAddition |
 | score | 51 | 56 | c | Base score reaches return without streak bonus | shortStreakCoversBestFalseAndBaseScoreOnly |
-| score | 54 | 56 | c | Updated score reaches return | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition |
+| score | 54 | 56 | c | Updated score reaches return | allDefs_initialScoreDefinitionReachesBonusAddition / allDefs_baseScoreDefinitionReachesBonusAddition / longStreakCoversBestUpdateAndAdditionalScore |
 
 **Kill at line 46:** the assignment `streak = 0` kills any earlier definition of `streak` (initialization at line 36 or increment at line 41) along a path that reaches this assignment. Consequently, an earlier streak definition cannot be paired with a later line-42 comparison if the path crosses line 46 first. The reset definition at line 46 can reach the line-41 increment when a later attendance element is positive.
 
